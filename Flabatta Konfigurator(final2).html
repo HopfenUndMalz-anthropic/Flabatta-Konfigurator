@@ -1,0 +1,1365 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Flabatta Konfigurator</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap">
+<style>
+:root {
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --fg: #1B1D1F;
+  --muted: #6A7077;
+  --line: #E4E6E8;
+  --chip: #F4F5F3;
+  --accent: #4C8A3C;
+  --accent-fg: #FFFFFF;
+  --accent-soft: #EBF4E7;
+  --signal: #B45309;
+  --ok: #4C8A3C;
+  --c-protein: #4C8A3C;
+  --c-carbs: #E0A030;
+  --c-fat: #8B939B;
+  --focus: #2E6B22;
+  --font: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: var(--font);
+  --font-mono: var(--font);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101411; --surface: #171C18; --fg: #ECEFEA; --muted: #98A29A; --line: #29302B; --chip: #1C221E;
+    --accent: #7FBF6C; --accent-fg: #0C1809; --accent-soft: #1D2B19; --signal: #F0A05A; --ok: #7FBF6C;
+    --c-protein: #7FBF6C; --c-carbs: #E8B050; --c-fat: #8F9A92; --focus: #A5DB94; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101411; --surface: #171C18; --fg: #ECEFEA; --muted: #98A29A; --line: #29302B; --chip: #1C221E;
+  --accent: #7FBF6C; --accent-fg: #0C1809; --accent-soft: #1D2B19; --signal: #F0A05A; --ok: #7FBF6C;
+  --c-protein: #7FBF6C; --c-carbs: #E8B050; --c-fat: #8F9A92; --focus: #A5DB94; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 15px; line-height: 1.5; padding-bottom: 24px; }
+h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.wrap { max-width: 1400px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.empty, .none { color: var(--muted); font-size: 0.9rem; margin: 0; }
+[id] { scroll-margin-top: 84px; }
+
+/* Kopfzeile */
+.top { position: sticky; top: 0; z-index: 30; background: var(--bg); border-bottom: 1px solid var(--line); padding-top: env(safe-area-inset-top, 0px); }
+.top .wrap { display: flex; align-items: center; flex-wrap: wrap; gap: 0 28px; min-height: 60px; }
+.brand { font-weight: 300; letter-spacing: 0.26em; font-size: 1.2rem; text-transform: uppercase; white-space: nowrap; }
+.brand b { font-weight: 700; }
+.nav { display: flex; flex-wrap: wrap; gap: 0 22px; }
+.nav button { background: none; border: 0; padding: 0; min-height: 44px; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+@media (hover: hover) { .nav button:hover { color: var(--fg); } }
+.tools { margin-left: auto; display: flex; gap: 2px; }
+.iconbtn { position: relative; min-width: 44px; min-height: 44px; border: 0; background: none; display: grid; place-items: center; color: var(--fg); }
+.badge-n { position: absolute; top: 5px; right: 3px; background: var(--accent); color: var(--accent-fg); font-size: 0.62rem; font-weight: 700; border-radius: 999px; min-width: 17px; height: 17px; display: grid; place-items: center; padding: 0 4px; }
+
+/* Kategorien */
+.pillbar { padding-block: 16px 4px; }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { min-height: 40px; padding: 6px 18px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg); font-size: 0.8rem; font-weight: 500; }
+@media (hover: hover) { .pill:hover { border-color: var(--fg); } }
+.pill[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+/* Seitenaufbau */
+.shop { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; padding-block: 18px 8px; align-items: start; }
+@media (min-width: 1100px) { .shop { grid-template-columns: 210px minmax(0, 1fr) 340px; gap: 36px; } }
+
+.side summary { list-style: none; cursor: pointer; min-height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; border: 1px solid var(--line); border-radius: 6px; font-size: 0.85rem; font-weight: 500; }
+.side summary::-webkit-details-marker { display: none; }
+.side summary::after { content: "+"; font-size: 1.2rem; font-weight: 300; }
+.side[open] summary::after { content: "\2212"; }
+.side .inner { display: grid; gap: 22px; padding-top: 14px; }
+.side h2 { font-size: 0.9rem; font-weight: 400; color: var(--muted); display: none; }
+@media (min-width: 1100px) {
+  .side summary { display: none; }
+  .side .inner { padding-top: 0; }
+  .side h2 { display: block; }
+  .side { position: sticky; top: 76px; }
+}
+.fgrp h4 { font-size: 0.8rem; font-weight: 500; margin-bottom: 4px; }
+.fgrp label { display: flex; align-items: center; gap: 10px; min-height: 40px; font-size: 0.86rem; }
+.fgrp input[type=checkbox], .check input { width: 18px; height: 18px; accent-color: var(--accent); }
+.sideacts { display: grid; gap: 8px; }
+.btn { min-height: 44px; padding: 8px 18px; border-radius: 4px; border: 1px solid var(--fg); background: transparent; font-weight: 600; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.check { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-size: 0.9rem; }
+.acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.copybox { width: 100%; min-height: 100px; padding: 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); font: 0.8rem/1.4 var(--font); }
+
+/* Liste */
+.listhead { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 20px; margin-bottom: 16px; }
+.listhead h1 { font-size: 1.3rem; font-weight: 600; }
+.listhead p { margin: 0; color: var(--muted); font-size: 0.82rem; }
+.sort { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--muted); }
+.sort select { min-height: 40px; border: 1px solid var(--line); border-radius: 4px; padding: 0 10px; background: var(--bg); color: var(--fg); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 16px; }
+.card { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); padding: 12px 12px 14px; min-width: 0; }
+.card.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+@media (hover: hover) { .card:hover { box-shadow: 0 6px 22px rgba(20, 30, 20, .08); } .card.on:hover { box-shadow: 0 0 0 1px var(--accent), 0 6px 22px rgba(20, 30, 20, .08); } }
+.media { position: relative; aspect-ratio: 1 / 1; max-width: 100%; display: grid; place-items: center; margin-bottom: 12px; background: var(--bg); overflow: hidden; }
+.art { width: 82%; height: 82%; display: grid; place-items: center; font-size: 3.2rem; font-weight: 700; color: var(--muted); }
+.art img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 2px; }
+.media.full .art { width: 100%; height: 100%; }
+.media.full .art img { border-radius: 0; }
+.tag { position: absolute; top: 0; left: 0; z-index: 1; display: inline-flex; align-items: center; gap: 6px; background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 3px 11px 3px 4px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; }
+.tag i { width: 17px; height: 17px; border-radius: 50%; background: var(--fg); color: var(--bg); display: grid; place-items: center; font-style: normal; font-size: 0.6rem; }
+.meta { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.meta h3 { font-size: 0.88rem; font-weight: 500; overflow-wrap: anywhere; }
+.meta .price { font-size: 0.88rem; font-weight: 500; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.sub { margin: 2px 0 12px; font-size: 0.74rem; color: var(--muted); }
+.buy { margin-top: auto; display: grid; gap: 8px; }
+.avail { margin: 10px 0 0; font-size: 0.72rem; color: var(--accent); display: flex; align-items: center; gap: 7px; }
+.avail i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
+.avail.warn { color: var(--signal); }
+.pick { width: 100%; min-height: 44px; border: 1px solid var(--accent); color: var(--accent); background: var(--bg); border-radius: 3px; font-weight: 600; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; }
+.pick[aria-pressed="true"], .pick.solid { background: var(--accent); color: var(--accent-fg); }
+.step { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--line); border-radius: 3px; min-height: 44px; background: var(--bg); }
+.step button { width: 44px; height: 44px; border: 0; background: none; font-size: 1.2rem; font-weight: 300; }
+.step button:disabled { opacity: 0.35; cursor: default; }
+.step .q { text-align: center; line-height: 1.15; }
+.step .q b { font-weight: 600; font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+.step .q i { display: block; font-style: normal; font-size: 0.66rem; color: var(--muted); }
+.collage { width: 100%; height: 100%; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 6px; padding: 4px; }
+.collage .cell { display: grid; place-items: center; min-width: 0; min-height: 0; }
+.collage .cell svg { width: 100%; height: 100%; }
+.dice { width: 70%; height: 70%; }
+
+/* Warenkorb */
+.cart { border: 1px solid var(--line); border-radius: 4px; background: var(--surface); padding: 18px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+@media (min-width: 1100px) { .cart { position: sticky; top: 76px; max-height: calc(100dvh - 92px); overflow-y: auto; } }
+.cart-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--accent); }
+.cart-h h2 { font-size: 1.05rem; font-weight: 500; color: var(--fg); }
+.cart .swname { margin: -6px 0 0; font-size: 0.78rem; color: var(--muted); }
+.lines { list-style: none; margin: 0; padding: 0; display: grid; }
+.line { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+.line:first-child { border-top: 0; padding-top: 0; }
+.line .nm { font-size: 0.84rem; font-weight: 500; overflow-wrap: anywhere; }
+.line .pr { font-size: 0.84rem; font-variant-numeric: tabular-nums; text-align: right; }
+.line .sm { grid-column: 1 / -1; font-size: 0.7rem; color: var(--muted); }
+.line .ctl { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 6px; }
+.cart .step { width: 128px; flex: none; min-height: 40px; }
+.cart .step button { width: 40px; height: 40px; }
+.line .rm { background: none; border: 0; min-width: 44px; min-height: 40px; color: var(--muted); font-size: 1.15rem; }
+.rule { border: 0; border-top: 1px solid var(--fg); margin: 0; }
+.tot { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 0.86rem; }
+.tot.big { font-weight: 600; }
+.tot.big b { font-size: 1.2rem; font-weight: 600; }
+.tot span:last-child { font-variant-numeric: tabular-nums; }
+.kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.kpis div { border: 1px solid var(--line); border-radius: 3px; padding: 8px 10px; min-width: 0; }
+.kpis small { display: block; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.kpis b { font-size: 0.95rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.cta { width: 100%; min-height: 48px; background: var(--accent); color: var(--accent-fg); border: 0; border-radius: 3px; font-weight: 600; font-size: 0.74rem; letter-spacing: 0.16em; text-transform: uppercase; }
+.lnk { background: none; border: 0; min-height: 44px; color: var(--muted); font-size: 0.8rem; text-decoration: underline; text-underline-offset: 3px; }
+.cart .estinfo { margin: 0; font-size: 0.7rem; color: var(--muted); text-align: center; }
+
+/* Nährwerte */
+.section { padding-block: 36px 0; max-width: 680px; }
+.section h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: 14px; }
+.nut { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 16px 18px 14px; min-width: 0; }
+.nut h3 { font-size: 1.05rem; font-weight: 700; padding-bottom: 6px; border-bottom: 4px solid var(--fg); margin-bottom: 4px; }
+.nut table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.nut th { font-weight: 400; font-size: 0.7rem; color: var(--muted); text-align: right; padding: 2px 0 6px; }
+.nut th:first-child { text-align: left; }
+.nut td { padding: 6px 0; border-top: 1px solid var(--line); }
+.nut td.v { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 10px; font-weight: 500; }
+.nut tr.sub td:first-child { padding-left: 16px; color: var(--muted); }
+.nut tr.main td:first-child { font-weight: 600; }
+.nut .est { color: var(--signal); font-weight: 700; margin-left: 2px; }
+.nut .legend-note { margin: 8px 0 0; font-size: 0.72rem; color: var(--muted); }
+.macro { margin-top: 12px; }
+.macro .barline { display: flex; height: 12px; border-radius: 3px; overflow: hidden; background: var(--chip); }
+.macro .barline span { display: block; min-width: 2px; }
+.macro ul { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 0.76rem; }
+.macro li { display: inline-flex; align-items: center; gap: 6px; }
+.macro li i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.macro .cap { font-size: 0.72rem; color: var(--muted); margin: 0 0 6px; }
+
+/* Fotos im Formular */
+.ph { width: 64px; height: 64px; border-radius: 8px; background: var(--chip); overflow: hidden; display: grid; place-items: center; font-weight: 700; font-size: 1.3rem; color: var(--muted); border: 1px solid var(--line); }
+.ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ph svg { width: 100%; height: 100%; }
+.photo { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.photo .ph { width: 88px; height: 88px; }
+.photo input[type=file] { min-width: 0; max-width: 100%; }
+
+.bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: none; align-items: center; justify-content: space-between; gap: 12px; padding: 8px max(16px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); background: var(--fg); color: var(--bg); font-size: 0.88rem; }
+.bar b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.bar button { background: var(--accent); color: var(--accent-fg); border: 0; border-radius: 3px; min-height: 44px; padding: 0 18px; font-weight: 600; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; }
+@media (max-width: 1099px) { .bar { display: flex; } body { padding-bottom: 92px; } }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(80px + env(safe-area-inset-bottom, 0px)); z-index: 40; background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 4px; font-size: 0.86rem; max-width: min(92vw, 420px); text-align: center; }
+@media (min-width: 1100px) { .toast { bottom: 24px; } }
+@media (prefers-reduced-motion: no-preference) { .card, .pill, .pick { transition: box-shadow .15s, border-color .15s, background-color .15s; } }
+.mgr { margin-top: 36px; border-top: 1.5px solid var(--line); padding-top: 18px; }
+.mgr > summary { cursor: pointer; font-family: var(--font-display); font-variation-settings: "wdth" 108; font-weight: 700; font-size: 1.35rem; min-height: 44px; display: flex; align-items: center; }
+.mgr .state { margin: 6px 0 14px; color: var(--muted); font-size: 0.88rem; max-width: 70ch; }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.tablewrap table { width: 100%; border-collapse: collapse; font-size: 0.86rem; min-width: 680px; }
+.tablewrap th { text-align: left; font: 500 0.72rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--line); }
+.tablewrap td { padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.tablewrap td.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; }
+.tablewrap tr:last-child td { border-bottom: 0; }
+.mini { min-height: 36px; padding: 4px 12px; border: 1.5px solid var(--line); border-radius: 6px; background: var(--chip); font-weight: 500; font-size: 0.82rem; }
+.mini.danger { border-color: var(--signal); color: var(--signal); background: transparent; }
+form.pf { margin-top: 18px; display: grid; gap: 14px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+form.pf h3 { font-size: 1.1rem; }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.fields label { display: grid; gap: 4px; font-size: 0.8rem; color: var(--muted); min-width: 0; }
+.fields input, .fields select { min-height: 44px; padding: 6px 10px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); width: 100%; min-width: 0; }
+.fields fieldset { grid-column: 1 / -1; border: 0; margin: 0; padding: 0; min-width: 0; }
+.fields legend { font: 500 0.78rem var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 0 0 8px; }
+.fields .inner { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; }
+.formerr { color: var(--signal); font-size: 0.86rem; min-height: 1.3em; margin: 0; }
+.foot { margin-top: 28px; color: var(--muted); font-size: 0.8rem; max-width: 80ch; }
+
+.media.wide .art { width: 98%; height: 98%; }
+.prices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+.prices span { border: 1px solid var(--line); border-radius: 3px; padding: 6px 8px; min-width: 0; }
+.prices small { display: block; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.prices b { font-size: 0.92rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.reachline { margin: 0 0 8px; font-size: 0.74rem; color: var(--accent); }
+.reachline b { font-weight: 700; }
+.sub.names { margin: 0 0 12px; }
+.line.grp, .grp { padding: 14px 0 6px; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); border-top: 1px solid var(--line); list-style: none; }
+.reach { border: 1px solid var(--accent); background: var(--accent-soft); border-radius: 3px; padding: 10px 12px; display: grid; gap: 2px; }
+.reach small { font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.reach b { font-size: 1.1rem; font-weight: 700; }
+.reach span { font-size: 0.76rem; color: var(--muted); }
+.nutwrap { overflow-x: auto; }
+.nutwrap table { min-width: 360px; }
+.swart { height: 170px; display: grid; place-items: center; border-radius: 4px; background: radial-gradient(ellipse at 50% 85%, var(--accent-soft), var(--bg) 70%); }
+.swart svg { width: 100%; height: 100%; }
+.grid { align-items: start; }
+.nutd { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 2px; }
+.nutd summary { cursor: pointer; min-height: 42px; display: flex; align-items: center; justify-content: space-between; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; list-style: none; }
+.nutd summary::-webkit-details-marker { display: none; }
+.nutd summary::after { content: "+"; font-size: 1.15rem; font-weight: 300; }
+.nutd[open] summary::after { content: "\2212"; }
+.nd table { width: 100%; border-collapse: collapse; font-size: 0.74rem; }
+.nd th { font-weight: 400; color: var(--muted); font-size: 0.62rem; text-align: right; padding: 2px 0 4px; }
+.nd td { padding: 4px 0; border-top: 1px solid var(--line); }
+.nd td.v { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 6px; }
+.nd tr.sub td:first-child { padding-left: 10px; color: var(--muted); }
+.nd .srcl { margin: 8px 0 0; font-size: 0.7rem; color: var(--muted); }
+.nd .est { color: var(--signal); font-weight: 700; margin-left: 2px; }
+@media (max-width: 899px) {
+  .top .wrap { gap: 0 12px; }
+  .brand { font-size: 0.95rem; letter-spacing: 0.2em; }
+  .tools { order: 2; }
+  .nav { order: 3; flex-basis: 100%; gap: 0 14px; }
+  .nav button { font-size: 0.62rem; letter-spacing: 0.1em; }
+}
+@media (max-width: 560px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .card { padding: 8px 8px 12px; }
+  .art { font-size: 2.2rem; }
+  .meta { flex-direction: column; gap: 0; }
+  .pick, .step { font-size: 0.66rem; }
+  .step button { width: 36px; }
+}
+
+[hidden] { display: none !important; }
+</style>
+
+<div class="top">
+  <div class="wrap">
+    <span class="brand"><b>Flabatta</b> Konfigurator</span>
+    <nav class="nav" aria-label="Hauptmenü">
+      <button type="button" data-nav="products">Zutaten</button>
+      <button type="button" data-nav="sandwiches">Sandwiches</button>
+      <button type="button" data-nav="nutri">Nährwerte</button>
+      <button type="button" data-nav="manage" id="navManage" hidden>Verwalten</button>
+    </nav>
+    <div class="tools">
+      <button type="button" class="iconbtn" data-nav="cart" aria-label="Zum Sandwich">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span class="badge-n" id="cartBadge">0</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap pillbar"><div class="pills" id="pills" role="group" aria-label="Kategorien"></div></div>
+
+<div class="wrap">
+  <div class="shop">
+    <details class="side" id="side" open>
+      <summary>Filter und Aktionen</summary>
+      <div class="inner">
+        <h2>Deine Wünsche</h2>
+        <div class="fgrp">
+          <h4>Eigenschaften</h4>
+          <label for="vegOnly"><input type="checkbox" id="vegOnly"> vegetarisch</label>
+          <label for="fPicked"><input type="checkbox" id="fPicked"> nur gewählte</label>
+        </div>
+        <div class="fgrp">
+          <h4>Ziel</h4>
+          <label for="fProt"><input type="checkbox" id="fProt"> eiweißreich (ab 15 g / 100 g)</label>
+          <label for="fLight"><input type="checkbox" id="fLight"> leicht (bis 120 kcal / 100 g)</label>
+        </div>
+        <div class="sideacts">
+          <button type="button" class="btn primary" id="rand">Zufälliges Sandwich</button>
+          <button type="button" class="btn" id="clear">Leeren</button>
+        </div>
+      </div>
+    </details>
+
+    <main id="shop">
+      <div class="listhead">
+        <div><h1 id="listTitle">Alle Produkte</h1><p id="listCount"></p></div>
+        <label class="sort" for="sort">Sortieren
+          <select id="sort">
+            <option value="std">Standard</option>
+            <option value="price">Packungspreis, aufsteigend</option>
+            <option value="kcal">Kalorien, aufsteigend</option>
+            <option value="protein">Eiweiß, absteigend</option>
+          </select>
+        </label>
+      </div>
+      <div class="grid" id="grid"></div>
+
+      <section class="section" id="nutri" aria-label="Nährwerttabelle">
+        <h2>Nährwerttabelle</h2>
+        <div class="nut">
+          <h3>Dein Sandwich</h3>
+          <div class="nutwrap"><table>
+            <thead id="nutHead"></thead>
+            <tbody id="nutRows"></tbody>
+          </table></div>
+          <div class="macro">
+            <p class="cap">Energieanteile, aus Eiweiß, Kohlenhydraten und Fett berechnet</p>
+            <div class="barline" id="macroBar" role="img" aria-label="Energieanteile"></div>
+            <ul id="macroLeg"></ul>
+          </div>
+          <p class="legend-note" id="estNote" hidden><span class="est">~</span> enthält Näherungswerte</p>
+        </div>
+      </section>
+
+      <details class="mgr" id="mgr" hidden>
+    <summary>Produkte verwalten</summary>
+    <p class="state" id="dbState"></p>
+    <div id="sa" hidden style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0">
+      <button type="button" class="mini" id="saExport">Katalog exportieren (katalog.json)</button>
+      <button type="button" class="mini" id="saImport">Katalog importieren</button>
+      <button type="button" class="mini danger" id="saReset">Eigene Änderungen verwerfen</button>
+      <input type="file" id="saFile" accept=".json,application/json" hidden>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Produkt</th><th>Kategorie</th><th>Einheit</th><th>Packung</th><th>kcal/100</th><th>Quelle</th><th></th></tr></thead>
+        <tbody id="mgrRows"></tbody>
+      </table>
+    </div>
+    <form class="pf" id="pf" novalidate>
+      <h3 id="pfTitle">Neues Produkt</h3>
+      <input type="hidden" id="pf-id">
+      <div class="fields">
+        <label for="pf-name">Name<input id="pf-name" type="text" autocomplete="off"></label>
+        <label for="pf-cat">Kategorie<select id="pf-cat"></select></label>
+        <label for="pf-unit">Einheit im Sandwich<select id="pf-unit"></select></label>
+        <label for="pf-step">Schrittweite<select id="pf-step"><option value="1">1</option><option value="0,5">0,5 (halbe)</option></select></label>
+        <label for="pf-unitG">Gewicht pro Einheit<input id="pf-unitG" type="text" inputmode="decimal" placeholder="z. B. 20"></label>
+        <label for="pf-mu">Gewicht in<select id="pf-mu"><option value="g">g</option><option value="ml">ml</option></select></label>
+        <label for="pf-price">Packungspreis in €<input id="pf-price" type="text" inputmode="decimal" placeholder="z. B. 1,65"></label>
+        <label for="pf-packG">Packungsinhalt<input id="pf-packG" type="text" inputmode="decimal" placeholder="z. B. 200"></label>
+        <label for="pf-def">Übliche Menge<input id="pf-def" type="text" inputmode="decimal" placeholder="z. B. 2"></label>
+        <fieldset>
+          <legend>Nährwerte pro 100 g bzw. 100 ml</legend>
+          <div class="inner">
+            <label for="pf-kcal">kcal<input id="pf-kcal" type="text" inputmode="decimal"></label>
+            <label for="pf-protein">Eiweiß g<input id="pf-protein" type="text" inputmode="decimal"></label>
+            <label for="pf-carbs">Kohlenhydrate g<input id="pf-carbs" type="text" inputmode="decimal"></label>
+            <label for="pf-sugar">davon Zucker g<input id="pf-sugar" type="text" inputmode="decimal"></label>
+            <label for="pf-fat">Fett g<input id="pf-fat" type="text" inputmode="decimal"></label>
+            <label for="pf-sat">davon gesättigt g<input id="pf-sat" type="text" inputmode="decimal"></label>
+            <label for="pf-salt">Salz g<input id="pf-salt" type="text" inputmode="decimal"></label>
+          </div>
+        </fieldset>
+        <label for="pf-src">Quelle der Werte<input id="pf-src" type="text" autocomplete="off" placeholder="z. B. Aldi-Produktseite"></label>
+        <div class="photo"><div class="ph" id="pf-ph"></div><label for="pf-file" style="display:grid;gap:4px;font-size:0.8rem;color:var(--muted);min-width:0">Foto<input id="pf-file" type="file" accept="image/*"></label><button type="button" class="mini" id="pf-imgclear">Foto entfernen</button><span id="pf-imgmsg" style="font-size:0.8rem;color:var(--muted)"></span></div>
+        <label class="check" for="pf-veg" style="align-self:end"><input id="pf-veg" type="checkbox" checked> vegetarisch</label>
+        <label class="check" for="pf-est" style="align-self:end"><input id="pf-est" type="checkbox"> Nährwerte sind Näherungen</label>
+      </div>
+      <p class="formerr" id="pfErr" role="alert"></p>
+      <div class="acts">
+        <button type="submit" class="btn primary" id="pfSave">Produkt speichern</button>
+        <button type="button" class="btn" id="pfReset">Formular leeren</button>
+      </div>
+    </form>
+  </details>
+
+      <p class="foot">Nährwerte stammen von Aldi-Süd-Produktseiten, sonst aus Datenbanken (fddb, FatSecret, wikifit, Rewe). Ein ~ markiert Werte, die geschätzt sind. Gewicht pro Scheibe oder EL, Packungsgrößen und Preise mit dem Hinweis „angenommen“ sind Annahmen und lassen sich unter „Produkte verwalten“ ändern. Alle Angaben sind Richtwerte.</p>
+    </main>
+
+    <aside class="cart" id="cart" aria-label="Dein Sandwich">
+      <div class="cart-h">
+        <h2>Dein Sandwich</h2>
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11h18M4 11a8 5 0 0 1 16 0M4 15h16M5 15c0 3 2 4 4 4h6c2 0 4-1 4-4"/></svg>
+      </div>
+      <div class="swart" id="swArt" aria-hidden="true"></div>
+      <p class="swname" id="swName"></p>
+      <ul class="lines" id="cartLines"></ul>
+      <hr class="rule">
+      <div class="tot big"><span id="cartCount">0 Zutaten</span><b id="sumShare"></b></div>
+      <div class="tot" id="dessRow" hidden><span>Nachtisch</span><span id="sumDess"></span></div>
+      <div class="tot big" id="gesRow" hidden><span>Gesamt</span><b id="sumGes"></b></div>
+      <div class="tot"><span>Packungen kaufen</span><span id="sumPack"></span></div>
+      <div class="reach" id="reach" hidden></div>
+      <div class="kpis" id="kpis"></div>
+      <button type="button" class="cta" id="copy">Einkaufsliste kopieren</button>
+      <textarea class="copybox" id="copybox" readonly hidden aria-label="Einkaufsliste zum Kopieren"></textarea>
+      <button type="button" class="lnk" data-nav="nutri">Nährwerttabelle ansehen</button>
+    </aside>
+  </div>
+</div>
+
+<div class="bar" aria-label="Zwischensumme">
+  <span><b id="barKcal">0 kcal</b> · <b id="barPrice">0,00 €</b></span>
+  <button type="button" data-nav="cart">Sandwich ansehen</button>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (s) { return document.querySelector(s); };
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var nf = function (v, d) { return Number(v).toLocaleString('de-DE', { minimumFractionDigits: d, maximumFractionDigits: d }); };
+  var eur = function (v) { return nf(v, 2) + ' €'; };
+  var qf = function (q) { var w = Math.floor(q + 1e-9), h = q - w; if (Math.abs(h - 0.5) < 1e-9) return (w ? String(w) : '') + '\u00BD'; return Number.isInteger(q) ? String(q) : nf(q, 1); };
+
+  var CATS = [
+    { id: 'bread', name: 'Brot', hint: 'Eines wählen', single: true },
+    { id: 'sauce', name: 'Sauce', hint: 'Eine wählen, Menge in EL', single: true },
+    { id: 'spread', name: 'Aufstrich', hint: 'Menge in EL' },
+    { id: 'cheese', name: 'Käse', hint: 'Menge in Scheiben' },
+    { id: 'meat', name: 'Aufschnitt', hint: 'Menge in Scheiben' },
+    { id: 'veg', name: 'Frisches', hint: 'Menge je Einheit' },
+    { id: 'dessert', name: 'Nachtisch', hint: 'Menge in Stück' }
+  ];
+  var CAT_IDX = {}; CATS.forEach(function (c, i) { CAT_IDX[c.id] = i; });
+  var UNITS = ['Scheibe', 'EL', 'Blatt', 'Streifen', 'Handvoll', 'Stück'];
+  var PLURAL = { Scheibe: 'Scheiben', EL: 'EL', Blatt: 'Blätter', Streifen: 'Streifen', Handvoll: 'Handvoll', 'Stück': 'Stück' };
+  var NUT = [
+    { k: 'kcal', l: 'Brennwert', u: 'kcal', d: 0, main: true },
+    { k: 'protein', l: 'Eiweiß', u: 'g', d: 1, main: true },
+    { k: 'carbs', l: 'Kohlenhydrate', u: 'g', d: 1, main: true },
+    { k: 'sugar', l: 'davon Zucker', u: 'g', d: 1, sub: true },
+    { k: 'fat', l: 'Fett', u: 'g', d: 1, main: true },
+    { k: 'sat', l: 'davon gesättigte Fettsäuren', u: 'g', d: 1, sub: true },
+    { k: 'salt', l: 'Salz', u: 'g', d: 2, main: true }
+  ];
+
+  /* Standardkatalog: Werte je 100 g bzw. 100 ml, Reihenfolge kcal, Eiweiß, KH, Zucker, Fett, gesättigt, Salz */
+  var D = function (id, name, cat, unit, unitG, price, packG, def, veg, n, est, src, pa, mu) {
+    return { id: id, name: name, cat: cat, unit: unit, unitG: unitG, packPrice: price, packG: packG, def: def, veg: veg,
+      kcal: n[0], protein: n[1], carbs: n[2], sugar: n[3], fat: n[4], sat: n[5], salt: n[6], est: est || [], src: src, pa: !!pa, mu: mu || 'g' };
+  };
+  var DEFAULTS = [
+    D('laugenecke', 'Laugenecke', 'bread', 'Stück', 85, 0.85, 85, 1, true, [374, 8.6, 45.2, 3.2, 17, 9, 1.5], ['sat'], 'fddb, Butterlaugenecke Aldi (unbestätigt)'),
+    D('laugenstange', 'Laugenstange', 'bread', 'Stück', 95, 0.39, 95, 1, true, [224, 8.5, 44.2, 2.5, 1.1, 0.3, 1.8], ['sugar', 'sat', 'salt'], 'FatSecret, Aldi Laugenstange (95 g)'),
+    D('flabatta', 'Flabatta', 'bread', 'Stück', 100, 0.99, 100, 1, true, [242, 7.5, 47.2, 3.2, 1.9, 0.3, 1.5], ['sat'], 'Rewe Ciabatta, als Ciabatta angenommen'),
+    D('baguette', 'Rustikales Baguette', 'bread', 'Stück', 125, 0.65, 125, 1, true, [254, 8, 52, 2.5, 0.8, 0.2, 1.3], ['sugar', 'sat', 'salt'], 'FatSecret, Aldi Baguette'),
+
+    D('pesto-genovese', 'Pesto Genovese', 'sauce', 'EL', 15, 0.99, 190, 1, true, [497, 5.3, 11, 8.6, 48, 7, 1.5], ['sat', 'salt'], 'fddb, Cucina Nobile Pesto Genovese (unbestätigt)'),
+    D('pesto-rosso', 'Pesto Rosso', 'sauce', 'EL', 15, 0.99, 190, 1, true, [307, 4.9, 8, 6, 28, 4, 1.6], ['sugar', 'sat', 'salt'], 'FatSecret, Aldi Pesto Rosso'),
+    D('remoulade', 'Remoulade', 'sauce', 'EL', 15, 1.79, 250, 1, true, [600, 0.6, 5, 3.7, 64, 5, 1.27], ['sat'], 'fddb, Delikato Remoulade', true),
+    D('ketchup', 'Ketchup', 'sauce', 'EL', 17, 1.29, 500, 1, true, [93, 1.7, 20.6, 18.9, 0.1, 0, 2.5], [], 'fddb, Aldi Ketchup (unbestätigt)'),
+    D('dr-joghurt', 'Joghurt Dressing', 'sauce', 'EL', 15, 0.99, 250, 1, true, [119, 1.8, 4.8, 3.5, 10, 1, 1.5], ['sugar', 'sat', 'salt'], 'FatSecret, Wonnemeyer Joghurt Léger', false, 'ml'),
+    D('dr-french', 'French Dressing', 'sauce', 'EL', 15, 0.99, 250, 1, true, [450, 1.4, 8, 6, 45.6, 4, 2], ['sugar', 'sat', 'salt'], 'FatSecret, Aldi French Dressing', false, 'ml'),
+    D('dr-sylter', 'Sylter Art Dressing', 'sauce', 'EL', 15, 0.99, 250, 1, true, [280, 0.5, 11, 9, 25.9, 2.5, 1.5], ['sugar', 'sat', 'salt'], 'FatSecret, Wonnemeyer Sylter Art', false, 'ml'),
+    D('dr-senfhonig', 'Senf-Honig Dressing', 'sauce', 'EL', 15, 0.99, 250, 1, true, [344, 1.1, 12.9, 10, 31.8, 3, 1.6], ['sugar', 'sat', 'salt'], 'FatSecret, Wonnemeyer Honig-Senf', false, 'ml'),
+
+    D('frischkaese', 'Frischkäse', 'spread', 'EL', 20, 0.99, 175, 1, true, [241, 5.4, 3, 2.5, 23, 15, 0.9], ['sugar', 'sat', 'salt'], 'FatSecret, Milsani Frischkäse sahnig-cremig'),
+
+    D('mozzarella', 'Mozzarella', 'cheese', 'Stück', 125, 0.85, 125, 0.5, true, [247, 18, 1, 1, 19, 12, 0.5], [], 'Aldi Süd, Cucina Nobile Mozzarella (1 Stück = ganze Kugel)'),
+    D('burrata', 'Burrata', 'cheese', 'Stück', 125, 1.89, 125, 0.5, true, [223, 10, 0.8, 0.8, 20, 13, 0.7], ['sugar', 'sat', 'salt'], 'FatSecret, Aldi Burrata (1 Stück = ganze Kugel)'),
+    D('gouda', 'Gouda in Scheiben', 'cheese', 'Scheibe', 20, 1.65, 200, 2, true, [348, 24, 0.1, 0.1, 28, 18, 1.7], ['sugar', 'sat', 'salt'], 'FatSecret, Aldi Gouda jung in Scheiben'),
+
+    D('kochschinken', 'Kochschinken', 'meat', 'Scheibe', 17, 1.49, 200, 2, false, [111, 21, 0.3, 0.3, 2.8, 1, 2.1], [], 'Aldi Süd, Gut Drei Eichen Kochschinken-Genuss'),
+    D('salami', 'Salami', 'meat', 'Scheibe', 5, 1.69, 200, 5, false, [340, 21, 1, 1, 28, 12, 4], [], 'Aldi Süd, Gut Drei Eichen Delikatess Salami'),
+    D('haehnchen', 'Hähnchenbrustfilet in Scheiben', 'meat', 'Scheibe', 15, 2.99, 150, 3, false, [107, 21, 1, 0.6, 2, 0.6, 2.25], ['sat'], 'fddb, Aldi Süd Hähnchenbrustfilet Scheiben (unbestätigt)'),
+    D('myvay', 'MyVay Veganer Aufschnitt', 'meat', 'Scheibe', 12, 0.85, 100, 4, true, [215, 4.4, 5.4, 2.5, 18.9, 2.2, 2.9], [], 'Aldi Süd, MyVay Veganer Aufschnitt Klassik'),
+
+    D('gurke', 'Salatgurke', 'veg', 'Scheibe', 8, 1.09, 350, 4, true, [12, 0.6, 1.8, 1.4, 0.1, 0, 0.01], ['kcal', 'protein', 'carbs', 'sugar', 'fat', 'sat', 'salt'], 'Näherung, Standardwert Gurke', true),
+    D('eisberg', 'Eisbergsalat', 'veg', 'Blatt', 20, 0.69, 400, 1, true, [13, 1, 1.6, 1.5, 0.2, 0, 0.05], ['sugar', 'sat', 'salt'], 'wikifit, Eisbergsalat', true),
+    D('paprika', 'Paprika', 'veg', 'Streifen', 10, 0.79, 150, 3, true, [37, 1.3, 6.4, 6.4, 0.5, 0.1, 0.01], ['sat', 'salt'], 'wikifit, Paprika rot', true)
+,
+    D('serrano', 'Serrano Schinken', 'meat', 'Scheibe', 8, 1.89, 100, 3, false, [237, 34, 0.5, 0.5, 11, 3.8, 5], [], 'Aldi Süd, Tesoros del Sur Serrano Schinken'),
+    D('prosciutto', 'Prosciutto', 'meat', 'Scheibe', 10, 2.39, 200, 3, false, [257, 30, 0.5, 0.5, 15, 5.4, 3.7], [], 'Aldi Süd, Gourmet Finest Cuisine Prosciutto crudo'),
+    D('putenkochschinken', 'Putenkochschinken', 'meat', 'Scheibe', 12, 1.99, 150, 3, false, [116, 24, 0.5, 0, 2.4, 0.7, 2], ['sat', 'salt'], 'fddb, Aldi Süd Putenbrust (unbestätigt)'),
+    D('aioli', 'Aioli Dressing', 'sauce', 'EL', 15, 1.99, 250, 1, true, [260, 2, 10.5, 6, 23.2, 3.5, 2], ['sat', 'salt'], 'fddb, Aldi Knoblauchdressing (Näherung für Aioli)', false, 'ml'),
+    D('rucola', 'Rucola', 'veg', 'Handvoll', 10, 0.99, 100, 2, true, [27, 2.6, 2.1, 2.1, 0.7, 0.1, 0.05], ['kcal', 'sugar', 'sat', 'salt'], 'wikifit, Rucola (kcal nach Standardtabellen)', true),
+    D('donut', 'Pinker Donut', 'dessert', 'Stück', 54, 0.59, 54, 1, true, [441, 7.2, 41.2, 13.3, 27.2, 12, 1], ['sat'], 'fddb, Aldi Süd Donut mit weißer Glasur (Näherung)'),
+    D('painauchocolat', 'Pain au Chocolat', 'dessert', 'Stück', 65, 0.65, 65, 1, true, [410, 7.5, 44, 14, 22, 13, 1], ['kcal', 'protein', 'carbs', 'sugar', 'fat', 'sat', 'salt'], 'Näherung, typisches Pain au Chocolat'),
+    D('franzbroetchen', 'Franzbrötchen', 'dessert', 'Stück', 100, 0.79, 100, 1, true, [382, 4.9, 46.7, 18, 19.2, 11, 0.9], ['sugar', 'sat', 'salt'], 'FatSecret, Aldi Franzbrötchen'),
+    D('apfelecke', 'Apfelecke', 'dessert', 'Stück', 113, 0.69, 113, 1, true, [348, 4.4, 36.1, 14.5, 20.4, 11, 0.59], ['sat'], 'fddb, Aldi Süd Butter Apfeltasche'),
+    D('buttercroissant', 'Buttercroissant', 'dessert', 'Stück', 60, 0.49, 60, 1, true, [411, 8.3, 46.6, 6, 20.9, 12, 1.2], ['sugar', 'sat', 'salt'], 'FatSecret, Aldi Buttercroissant')
+  ];
+  DEFAULTS.forEach(function (p, i) { p.order = i; if (p.id === 'mozzarella' || p.id === 'burrata') p.step = 0.5; });
+
+  var PRESETS = [
+    { name: 'Schwenninger Klassiker', bread: 'baguette', sauce: 'dr-senfhonig', sq: 1, items: { kochschinken: 2, gouda: 2, eisberg: 1, gurke: 4 } },
+    { name: 'Mozzarella Verde', bread: 'flabatta', sauce: 'pesto-genovese', sq: 1, items: { mozzarella: 0.5, eisberg: 1, gurke: 4 } },
+    { name: 'Brotzeit-Ecke', bread: 'laugenecke', sauce: 'remoulade', sq: 1, items: { salami: 6, gouda: 2, gurke: 3 } },
+    { name: 'Chicken Parisienne', bread: 'baguette', sauce: 'dr-french', sq: 1, items: { haehnchen: 3, eisberg: 2, paprika: 3, gurke: 4 } },
+    { name: 'Green Deli', bread: 'laugenstange', sauce: 'dr-joghurt', sq: 1, items: { myvay: 4, frischkaese: 1, gurke: 4, paprika: 3, eisberg: 1 } },
+    { name: 'Burrata Rossa', bread: 'flabatta', sauce: 'pesto-rosso', sq: 1, items: { burrata: 0.5, paprika: 4, rucola: 2 } },
+    { name: 'Frühstücksstange', bread: 'laugenstange', sauce: null, sq: 1, items: { frischkaese: 1, kochschinken: 2, gurke: 5, eisberg: 1 } },
+    { name: 'Sylter Strand', bread: 'flabatta', sauce: 'dr-sylter', sq: 1, items: { haehnchen: 3, gouda: 1, eisberg: 2, gurke: 3 } },
+    { name: 'Serrano Sunset', bread: 'baguette', sauce: 'pesto-rosso', sq: 1, items: { serrano: 4, mozzarella: 0.5, rucola: 2, paprika: 2 } },
+    { name: 'Roma Express', bread: 'flabatta', sauce: 'aioli', sq: 1, items: { prosciutto: 3, burrata: 0.5, rucola: 2 } },
+    { name: 'Turkey Aioli Club', bread: 'laugenecke', sauce: 'aioli', sq: 1, items: { putenkochschinken: 3, gouda: 2, eisberg: 1, gurke: 4 } }
+  ];
+
+  var products = DEFAULTS.map(function (p) { return Object.assign({}, p); });
+  var sel = { bread: null, sauce: null, qty: {} };
+  var assetsNs = null, pfImg = '';
+  var db = null, canWrite = null, catalogInDb = false, dbWait = true;
+
+  function byId(id) { for (var i = 0; i < products.length; i++) if (products[i].id === id) return products[i]; return null; }
+  function stepOf(p) { return p.step || (p.unit === 'EL' ? 0.5 : 1); }
+  function uLabel(p, q) { return q === 1 ? p.unit : (PLURAL[p.unit] || p.unit); }
+  function isSingle(p) { return p.cat === 'bread' || p.cat === 'sauce'; }
+  function unitNut(p, k) { return (Number(p[k]) || 0) * p.unitG / 100; }
+  function packUnits(p) { return p.packG / p.unitG; }
+  function share(p, q) { return p.packPrice / packUnits(p) * q; }
+
+  function lines() {
+    var out = [];
+    CATS.forEach(function (c) {
+      products.filter(function (p) { return p.cat === c.id; }).forEach(function (p) {
+        if (p.cat === 'bread') { if (sel.bread === p.id) out.push({ p: p, q: 1 }); }
+        else if (p.cat === 'sauce') { if (sel.sauce === p.id) out.push({ p: p, q: sel.qty[p.id] || 1 }); }
+        else { var q = sel.qty[p.id] || 0; if (q > 0) out.push({ p: p, q: q }); }
+      });
+    });
+    return out;
+  }
+  function totals(ls) {
+    var t = { nut: {}, est: {}, share: 0, pack: 0, weight: 0 };
+    NUT.forEach(function (n) { t.nut[n.k] = 0; t.est[n.k] = false; });
+    ls.forEach(function (l) {
+      NUT.forEach(function (n) {
+        t.nut[n.k] += unitNut(l.p, n.k) * l.q;
+        if ((l.p.est || []).indexOf(n.k) >= 0) t.est[n.k] = true;
+      });
+      t.share += share(l.p, l.q);
+      t.pack += l.p.packPrice;
+      t.weight += l.p.unitG * l.q;
+    });
+    return t;
+  }
+  function listText(a) { return a.length <= 1 ? a.join('') : a.slice(0, -1).join(', ') + ' und ' + a[a.length - 1]; }
+  function sandwichName(ls) {
+    var b = byId(sel.bread);
+    var rest = ls.filter(function (l) { return l.p.cat !== 'bread' && l.p.cat !== 'sauce' && l.p.cat !== 'dessert'; }).map(function (l) { return l.p.name; });
+    var s = b ? b.name : 'Sandwich';
+    if (!rest.length) return s + ' pur';
+    return s + ' mit ' + listText(rest.slice(0, 3)) + (rest.length > 3 ? ' u. a.' : '');
+  }
+
+  /* Shop-Ansicht */
+  var view = 'all';
+  var F = { picked: false, protein: false, light: false, sort: 'std' };
+  var VIEWS = [{ id: 'all', name: 'Alle Produkte' }, { id: 'sandwiches', name: 'Sandwiches' }].concat(CATS.map(function (c) { return { id: c.id, name: c.name }; }));
+
+  function inSel(p) { if (p.cat === 'bread') return sel.bread === p.id; if (p.cat === 'sauce') return sel.sauce === p.id; return (sel.qty[p.id] || 0) > 0; }
+  function curQ(p) { if (p.cat === 'bread') return sel.bread === p.id ? 1 : 0; if (p.cat === 'sauce') return sel.sauce === p.id ? (sel.qty[p.id] || 1) : 0; return sel.qty[p.id] || 0; }
+
+  function stepperHTML(p, q) {
+    var n = esc(p.name), min = p.cat === 'sauce' ? stepOf(p) : 0;
+    return '<div class="step" role="group" aria-label="Menge ' + n + '">' +
+      '<button type="button" data-act="dec" aria-label="Weniger ' + n + '"' + (q <= min ? ' disabled' : '') + '>−</button>' +
+      '<span class="q"><b>' + qf(q) + '</b><i>' + esc(uLabel(p, q)) + '</i></span>' +
+      '<button type="button" data-act="inc" aria-label="Mehr ' + n + '"' + (q >= 30 ? ' disabled' : '') + '>+</button></div>';
+  }
+  function okImg(u) { return typeof u === 'string' && (u.indexOf('https://') === 0 || u.indexOf('/_blob/') === 0 || u.indexOf('data:image/jpeg;base64,') === 0); }
+  /* Farbige Illustrationen als Standardbild, solange kein Foto hochgeladen ist */
+  var SV = function (s) { return '<svg viewBox="0 0 64 64" width="100%" height="100%" aria-hidden="true">' + s + '</svg>'; };
+  var DF = function (s) { return '<defs>' + s + '</defs>'; };
+  var LG = function (id, a, b, x1, y1, x2, y2) { return '<linearGradient id="' + id + '" x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"><stop offset="0" stop-color="' + a + '"/><stop offset="1" stop-color="' + b + '"/></linearGradient>'; };
+  var RG = function (id, cx, cy, r, st) { return '<radialGradient id="' + id + '" cx="' + cx + '" cy="' + cy + '" r="' + r + '" gradientUnits="userSpaceOnUse">' + st.map(function (s) { return '<stop offset="' + s[0] + '" stop-color="' + s[1] + '"/>'; }).join('') + '</radialGradient>'; };
+  var SH = function (cx, rx) { return '<defs><radialGradient id="shg"><stop offset="0" stop-color="#0F1E2E" stop-opacity=".32"/><stop offset=".6" stop-color="#0F1E2E" stop-opacity=".12"/><stop offset="1" stop-color="#0F1E2E" stop-opacity="0"/></radialGradient></defs><ellipse cx="' + cx + '" cy="58" rx="' + (rx * 1.12) + '" ry="3.6" fill="url(#shg)"/>'; };
+  var dots = function (pts, c, r, o) { return pts.map(function (q) { return '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="' + (q[2] || r || 1.5) + '" fill="' + c + '" opacity="' + (o || 1) + '"/>'; }).join(''); };
+  var jar = function (k, c1, c2, ic) {
+    return SV(DF(LG(k + 'a', '#A3AFBA', '#56636E', 0, 0, 0, 1) + LG(k + 'b', c1, c2, 0, 0, 0, 1) + LG(k + 'g', '#FFFFFF', '#DCE7EE', 0, 0, 1, 0)) + SH(32, 17) +
+      '<rect x="17" y="9" width="30" height="11" rx="3" fill="url(#' + k + 'a)"/><path d="M19.5 12.5H44.5" stroke="#fff" stroke-opacity=".4" stroke-width="1.2"/>' +
+      '<path d="M15 24Q15 20 19 20H45Q49 20 49 24V52Q49 58 43 58H21Q15 58 15 52Z" fill="url(#' + k + 'g)" stroke="#B3C2CD" stroke-width="1.3"/>' +
+      '<path d="M18 28H46V52Q46 55 43 55H21Q18 55 18 52Z" fill="url(#' + k + 'b)"/>' +
+      '<rect x="18" y="35" width="28" height="13" fill="#FFF8EA"/><circle cx="32" cy="41.5" r="4" fill="' + ic + '"/><path d="M32 37.5Q36 38 36 41.5" stroke="#fff" stroke-opacity=".5" fill="none"/>' +
+      '<rect x="19.5" y="26" width="3" height="26" rx="1.5" fill="#fff" opacity=".4"/>');
+  };
+  var bottle = function (k, c1, c2, cap, ic) {
+    return SV(DF(LG(k + 'a', c1, c2, 0, 0, 0, 1) + LG(k + 'g', '#FFFFFF', '#DCE7EE', 0, 0, 1, 0)) + SH(32, 15) +
+      '<rect x="26.5" y="4" width="11" height="9" rx="2.5" fill="' + cap + '"/><path d="M28.5 7H35.5" stroke="#fff" stroke-opacity=".4" stroke-width="1.2"/>' +
+      '<path d="M28.5 13H35.5V20Q45 24 45 33V53Q45 58 40 58H24Q19 58 19 53V33Q19 24 28.5 20Z" fill="url(#' + k + 'g)" stroke="#B3C2CD" stroke-width="1.3"/>' +
+      '<path d="M21.5 31Q21.5 30 23 30H41Q42.5 30 42.5 31V53Q42.5 55.5 40 55.5H24Q21.5 55.5 21.5 53Z" fill="url(#' + k + 'a)"/>' +
+      '<rect x="21.5" y="37" width="21" height="12" fill="#FFF8EA"/><circle cx="32" cy="43" r="3.6" fill="' + ic + '"/>' +
+      '<rect x="23" y="33" width="2.6" height="20" rx="1.3" fill="#fff" opacity=".4"/>');
+  };
+  var cuc = function (k, cx, cy, r) {
+    var s = [0, 60, 120, 180, 240, 300].map(function (a) { return '<ellipse cx="' + cx + '" cy="' + (cy - r * 0.45) + '" rx="1.7" ry="2.8" transform="rotate(' + a + ' ' + cx + ' ' + cy + ')"/>'; }).join('');
+    return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="url(#' + k + 'r)"/><circle cx="' + cx + '" cy="' + cy + '" r="' + (r - 3) + '" fill="url(#' + k + 'f)"/><circle cx="' + cx + '" cy="' + cy + '" r="' + (r * 0.55) + '" fill="#EDF7D2" opacity=".8"/><g fill="#B7D88A">' + s + '</g>';
+  };
+  var SALT = [[19, 46, 1.6], [27, 40, 1.4], [36, 42, 1.6], [45, 46, 1.4], [32, 29, 1.5], [25, 49, 1.3], [41, 36, 1.3], [32, 47, 1.2]];
+  var ILL = {
+    serrano: SV(DF(RG('sr1', 24, 30, 34, [[0, '#D5616C'], [.6, '#B03A47'], [1, '#7D1F2B']]) + RG('sr2', 36, 24, 28, [[0, '#C8505C'], [1, '#8A2531']]) + LG('srf', '#FFF7F1', '#F0CEC4', 0, 0, 0, 1)) + SH(32, 27) +
+      '<path d="M20 12C33 6 51 11 57 23C61 34 53 44 41 44C28 44 15 40 13 28C12 21 14 15 20 12Z" fill="url(#sr2)" stroke="#6E1B25" stroke-opacity=".5" stroke-width="1"/>' +
+      '<path d="M22 22Q34 16 50 22M20 30Q34 26 54 31" stroke="#EDA3AA" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".45"/>' +
+      '<path d="M5 35C7 22 22 18 35 22C47 26 59 30 59 41C59 52 44 58 30 57C16 56 3 48 5 35Z" fill="url(#sr1)" stroke="#6E1B25" stroke-opacity=".55" stroke-width="1"/>' +
+      '<path d="M5.6 37C7 48 18 56 30 56.4C44 57 57 51 58.6 42" stroke="url(#srf)" stroke-width="3.4" fill="none" stroke-linecap="round"/>' +
+      '<path d="M11 36Q22 29 34 33T54 37M10 44Q24 38 38 43T55 45" stroke="#F0A7AE" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".55"/>' +
+      '<path d="M13 40Q26 34 40 39M16 49Q28 45 44 49" stroke="#6E1B25" stroke-width=".9" fill="none" stroke-linecap="round" opacity=".35"/>' +
+      '<ellipse cx="19" cy="30" rx="8" ry="2.8" transform="rotate(-20 19 30)" fill="#fff" opacity=".22"/><path d="M40 27Q48 27 53 32" stroke="#fff" stroke-opacity=".2" stroke-width="2" fill="none" stroke-linecap="round"/>'),
+    prosciutto: SV(DF(LG('pc1', '#F6B0B4', '#D2707B', 0, 0, 0, 1) + LG('pc2', '#F9BEC0', '#DE808A', 0, 0, 0, 1) + LG('pcf', '#FFFAF5', '#F6DDD5', 0, 0, 0, 1)) + SH(32, 27) +
+      [[40, 'pc1'], [29, 'pc2'], [18, 'pc1']].map(function (b, i) {
+        var y = b[0];
+        return '<path d="M5 ' + y + 'C15 ' + (y - 11) + ' 27 ' + (y + 7) + ' 39 ' + (y - 3) + 'S55 ' + (y - 6) + ' 59 ' + (y + 1) + 'L58 ' + (y + 13) + 'C53 ' + (y + 19) + ' 45 ' + (y + 8) + ' 35 ' + (y + 15) + 'S13 ' + (y + 21) + ' 6 ' + (y + 14) + 'Z" fill="url(#' + b[1] + ')" stroke="#B4545E" stroke-opacity=".4" stroke-width=".8"/>' +
+          '<path d="M5 ' + y + 'C15 ' + (y - 11) + ' 27 ' + (y + 7) + ' 39 ' + (y - 3) + 'S55 ' + (y - 6) + ' 59 ' + (y + 1) + '" stroke="url(#pcf)" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
+          '<path d="M10 ' + (y + 9) + 'Q22 ' + (y + 4) + ' 34 ' + (y + 10) + 'T54 ' + (y + 8) + '" stroke="#B4545E" stroke-width="1" fill="none" stroke-linecap="round" opacity=".3"/>' +
+          '<path d="M12 ' + (y + 2) + 'Q22 ' + (y - 3) + ' 30 ' + (y + 2) + '" stroke="#fff" stroke-opacity=".4" stroke-width="1.6" fill="none" stroke-linecap="round"/>';
+      }).join('')),
+    putenkochschinken: SV(DF(RG('pt1', 24, 26, 24, [[0, '#FDEBE2'], [1, '#EDBBA8']])) + SH(32, 24) +
+      [[22, 38, 17], [43, 28, 14]].map(function (r) {
+        return '<circle cx="' + r[0] + '" cy="' + r[1] + '" r="' + r[2] + '" fill="url(#pt1)" stroke="#E2AB98" stroke-width="1.2"/>' +
+          '<circle cx="' + r[0] + '" cy="' + r[1] + '" r="' + (r[2] * .72) + '" fill="none" stroke="#D79A86" stroke-width="1.2" stroke-dasharray="22 6"/>' +
+          '<circle cx="' + r[0] + '" cy="' + r[1] + '" r="' + (r[2] * .42) + '" fill="none" stroke="#D79A86" stroke-width="1.2" stroke-dasharray="12 5"/>' +
+          '<circle cx="' + r[0] + '" cy="' + r[1] + '" r="' + (r[2] * .14) + '" fill="#D79A86"/>';
+      }).join('') + '<path d="M10 30Q14 22 22 21" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" opacity=".5"/>'),
+    rucola: SV(DF(LG('ru1', '#6FBC52', '#2D7A30', 0, 0, 0, 1)) + SH(32, 21) +
+      [[-56, .85], [-38, .98], [-20, 1.08], [-2, 1.16], [17, 1.08], [36, .98], [54, .86]].map(function (l) {
+        var lobes = [[-5, -11, 3.7, 5.8, -32], [5, -11, 3.7, 5.8, 32], [-5.6, -19, 4.3, 6.2, -26], [5.6, -19, 4.3, 6.2, 26], [-4.4, -27, 3.8, 5.4, -16], [4.4, -27, 3.8, 5.4, 16]];
+        return '<g transform="translate(32 57) rotate(' + l[0] + ') scale(' + l[1] + ')"><path d="M0 0V-9" stroke="#D3E8AA" stroke-width="1.8" stroke-linecap="round"/><g fill="url(#ru1)" stroke="#24662A" stroke-width=".5">' +
+          lobes.map(function (e) { return '<ellipse cx="' + e[0] + '" cy="' + e[1] + '" rx="' + e[2] + '" ry="' + e[3] + '" transform="rotate(' + e[4] + ' ' + e[0] + ' ' + e[1] + ')"/>'; }).join('') +
+          '<ellipse cx="0" cy="-20" rx="4.2" ry="18"/><ellipse cx="0" cy="-34" rx="4.6" ry="7"/></g>' +
+          '<path d="M0 -8V-38" stroke="#C4E39A" stroke-width="1" stroke-linecap="round"/><path d="M0 -13L-4 -17M0 -13L4 -17M0 -21L-4.5 -25M0 -21L4.5 -25M0 -29L-3.5 -32M0 -29L3.5 -32" stroke="#9AD173" stroke-width=".7" stroke-linecap="round"/>' +
+          '<ellipse cx="-2.6" cy="-30" rx="1.2" ry="4" fill="#fff" opacity=".22"/></g>';
+      }).join('')),
+    aioli: bottle('ai', '#F8EED0', '#E5D29E', '#5A6772', '#9BB365'),
+    donut: SV(DF(RG('dn1', 30, 22, 30, [[0, '#FFB9D2'], [1, '#EC6A9B']]) + LG('dn2', '#EBBF84', '#BE8548', 0, 0, 0, 1)) + SH(32, 25) +
+      '<path fill-rule="evenodd" fill="url(#dn2)" d="M7 36a25 21 0 1 0 50 0a25 21 0 1 0 -50 0ZM24 36a8 5.5 0 1 0 16 0a8 5.5 0 1 0 -16 0Z"/>' +
+      '<path fill-rule="evenodd" fill="url(#dn1)" d="M8 32a24 20 0 1 0 48 0a24 20 0 1 0 -48 0ZM23 32a9 6 0 1 0 18 0a9 6 0 1 0 -18 0Z"/>' +
+      '<path d="M14 24Q20 14 32 13" stroke="#fff" stroke-opacity=".55" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+      [[16, 30, 20, '#fff'], [22, 21, -30, '#FFD84D'], [31, 17, 70, '#5BB4F0'], [41, 17, 10, '#fff'], [49, 22, -50, '#FFD84D'], [52, 31, 30, '#7BD389'], [47, 41, 60, '#fff'], [38, 45, -20, '#5BB4F0'], [26, 44, 40, '#FFD84D'], [17, 39, -60, '#7BD389']].map(function (s) {
+        return '<rect x="' + (s[0] - 2) + '" y="' + (s[1] - .8) + '" width="4" height="1.7" rx=".85" fill="' + s[3] + '" transform="rotate(' + s[2] + ' ' + s[0] + ' ' + s[1] + ')"/>';
+      }).join('')),
+    painauchocolat: SV(DF(LG('pa1', '#F8CE80', '#C27B2A', 0, 0, 0, 1) + LG('pa2', '#5E3524', '#2A140A', 0, 0, 0, 1)) + SH(32, 27) +
+      '<g transform="rotate(-9 32 36)">' +
+      '<path d="M7 33Q6 23 15 21.5L49 20Q58 20 58.5 30L58 40Q57 49 48 50L16 51Q7 50 7 40Z" fill="url(#pa1)"/>' +
+      '<path d="M8.5 41Q9 49.5 17 50.4L48 49.5Q55.5 49 56.5 41" stroke="#8E4E17" stroke-width="2.2" fill="none" opacity=".45" stroke-linecap="round"/>' +
+      '<path d="M5 29Q4 27 7 26.5L13.5 26.5V41L7 41.5Q4 41 5 39Z" fill="url(#pa2)"/><path d="M59 29Q60 27 57 26.5L50.5 26.5V41L57 41.5Q60 41 59 39Z" fill="url(#pa2)"/>' +
+      '<path d="M6.5 29.5L12 29.5M52 29.5L57.5 29.5" stroke="#9A6A4E" stroke-width="1" stroke-linecap="round" opacity=".7"/>' +
+      [28, 35.5, 43].map(function (y) { return '<path d="M14 ' + (y + 2.2) + 'Q32 ' + (y - 1.5) + ' 50 ' + (y + 2.2) + '" stroke="#8F4E16" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".5"/><path d="M14 ' + y + 'Q32 ' + (y - 3.5) + ' 50 ' + y + '" stroke="#FBDFA4" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".7"/>'; }).join('') +
+      '<path d="M16 24.5Q32 20.5 50 23.5" stroke="#fff" stroke-opacity=".5" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
+      dots([[20, 47, .8], [30, 48.5, .7], [43, 47.5, .8], [12, 33, .7], [52, 45, .7]], '#E9B25F', 1, .9) + '</g>'),
+    franzbroetchen: SV(DF(RG('fb1', 26, 20, 40, [[0, '#F2C47D'], [.55, '#CD8C40'], [1, '#8F5522']]) + RG('fb2', 32, 34, 12, [[0, '#9C5A22'], [1, '#C98F4B']])) + SH(32, 28) +
+      '<ellipse cx="32" cy="34" rx="26" ry="21" fill="url(#fb1)"/>' +
+      '<path d="M6.5 37Q9 52 32 55Q55 52 57.5 37" stroke="#6F3B15" stroke-width="2.2" fill="none" opacity=".4" stroke-linecap="round"/>' +
+      '<ellipse cx="32" cy="34" rx="8" ry="5.5" fill="url(#fb2)" opacity=".7"/>' +
+      '<path d="M32 34m-2 0a2 2 0 1 1 4 0a6 6 0 1 1 -10 0a10 10 0 1 1 18 0a14 14 0 1 1 -26 0a18 18 0 1 1 34 0a21 17 0 1 1 -42 0" stroke="#6B3412" stroke-width="3.6" fill="none" stroke-linecap="round" opacity=".88"/>' +
+      '<path d="M32 34m-2 0a2 2 0 1 1 4 0a6 6 0 1 1 -10 0a10 10 0 1 1 18 0a14 14 0 1 1 -26 0a18 18 0 1 1 34 0a21 17 0 1 1 -42 0" stroke="#F0BD70" stroke-width="1.2" fill="none" stroke-linecap="round" transform="translate(1 -1.2)" opacity=".75"/>' +
+      dots([[14, 24, 1], [48, 18, 1.1], [53, 36, 1], [22, 49, 1.1], [41, 50, 1], [10, 36, .9], [34, 15, .9], [44, 44, .8], [18, 40, .8], [27, 23, .8], [49, 28, .8], [37, 47, .8]], '#FFF1D2', 1, .9) +
+      '<path d="M13 24Q19 14 32 13" stroke="#fff" stroke-opacity=".38" stroke-width="2.6" fill="none" stroke-linecap="round"/>'),
+    apfelecke: SV(DF(LG('ae1', '#F3C57A', '#BC7522', 0, 0, 1, 1) + LG('ae2', '#F9D68F', '#DDA04C', 0, 0, 1, 1)) + SH(32, 27) +
+      '<path d="M26 9L56 46L8 50Z" fill="url(#ae1)" stroke="#C98C3B" stroke-width="6" stroke-linejoin="round"/>' +
+      '<path d="M26 16L50 45L13 48Z" fill="url(#ae2)" stroke="url(#ae2)" stroke-width="3" stroke-linejoin="round"/>' +
+      (function () {
+        var P = [[26, 9], [56, 46], [8, 50]], out = '';
+        for (var i = 0; i < 3; i++) { var a = P[i], b = P[(i + 1) % 3]; for (var t = 0.06; t < 1; t += 0.1) out += '<circle cx="' + (a[0] + (b[0] - a[0]) * t).toFixed(1) + '" cy="' + (a[1] + (b[1] - a[1]) * t).toFixed(1) + '" r="1" fill="#A8691F" opacity=".5"/>'; }
+        return out;
+      })() +
+      '<path d="M18 38Q31 33 45 40" stroke="#6F3F15" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
+      '<ellipse cx="24" cy="38.5" rx="3.6" ry="2.4" fill="#F3DC8C"/><ellipse cx="31" cy="36.8" rx="3.8" ry="2.5" fill="#EACB62"/><ellipse cx="38" cy="38.5" rx="3.4" ry="2.3" fill="#F3DC8C"/>' +
+      '<path d="M22 40Q24 42 26 40.5M35 38.8Q37 40.6 39 39.4" stroke="#C8453A" stroke-width="1.5" fill="none" stroke-linecap="round"/><ellipse cx="30" cy="35.6" rx="1.8" ry=".8" fill="#fff" opacity=".6"/>' +
+      '<path d="M23 29Q29 26.5 35 29" stroke="#6F3F15" stroke-width="2" fill="none" stroke-linecap="round" opacity=".85"/><ellipse cx="29" cy="28.6" rx="2.6" ry="1.6" fill="#EFD27A"/>' +
+      '<path d="M20 44Q23 33 29 22" stroke="#fff" stroke-opacity=".38" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
+      dots([[30, 21, .9], [38, 26, 1], [44, 34, .9], [20, 36, .8], [34, 45, 1], [27, 44, .8], [41, 44, .9], [30, 31, .8], [47, 42, .8], [17, 45, .8]], '#FFFFFF', 1, .85)),
+    buttercroissant: SV(DF(LG('bc1', '#F7CA7C', '#B8691F', 0, 0, 0, 1)) + SH(32, 27) +
+      [[6, 46, 3.6, 6.4, 42], [11, 40, 5.6, 9.4, 35], [19, 33, 8, 12.6, 25], [45, 33, 8, 12.6, -25], [53, 40, 5.6, 9.4, -35], [58, 46, 3.6, 6.4, -42], [32, 29, 11.4, 16, 0]].map(function (e) {
+        var cx = e[0], cy = e[1], rx = e[2], ry = e[3], r = e[4];
+        return '<g transform="rotate(' + r + ' ' + cx + ' ' + cy + ')"><ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry + '" fill="url(#bc1)" stroke="#8A4C14" stroke-width="1" stroke-opacity=".6"/>' +
+          '<path d="M' + (cx - rx * .75) + ' ' + (cy - ry * .15) + 'Q' + cx + ' ' + (cy + ry * .12) + ' ' + (cx + rx * .75) + ' ' + (cy - ry * .15) + 'M' + (cx - rx * .7) + ' ' + (cy + ry * .35) + 'Q' + cx + ' ' + (cy + ry * .55) + ' ' + (cx + rx * .7) + ' ' + (cy + ry * .35) + '" stroke="#8A4C14" stroke-width=".9" fill="none" opacity=".35"/>' +
+          '<ellipse cx="' + (cx - rx * .1) + '" cy="' + (cy - ry * .55) + '" rx="' + (rx * .5) + '" ry="' + (ry * .16) + '" fill="#FFE8B4" opacity=".55"/></g>';
+      }).join('') +
+      dots([[10, 53, .8], [24, 50, .7], [40, 51, .7], [54, 52, .8], [32, 49, .7]], '#E7B05F', 1, .85)),
+    laugenecke: SV(DF(RG('le', 30, 32, 34, [[0, '#DB9250'], [.6, '#A85D2A'], [1, '#6B3212']]) + LG('lel', '#F4CE98', '#D89C58', 0, 0, 0, 1)) + SH(32, 25) +
+      '<path d="M32 7Q36 7 39 12L56 43Q61 52 52 54H12Q3 52 8 43L25 12Q28 7 32 7Z" fill="url(#le)"/>' +
+      '<path d="M32 7Q36 7 39 12L56 43Q61 52 52 54H12Q3 52 8 43L25 12Q28 7 32 7Z" fill="none" stroke="#5A290E" stroke-opacity=".5" stroke-width="1.4"/>' +
+      '<path d="M32 15Q29.5 32 32 47Q34.5 32 32 15Z" fill="url(#lel)"/><path d="M32 15Q29.5 32 32 47" stroke="#8A4A1E" stroke-width="1" fill="none"/>' +
+      '<path d="M22 21L12 43" stroke="#F2BC80" stroke-width="3" stroke-linecap="round" opacity=".5"/><path d="M42 22L52 41" stroke="#F2BC80" stroke-width="2" stroke-linecap="round" opacity=".25"/>' +
+      [[26, 26, 20], [38, 28, -30], [20, 40, 60], [44, 42, 10], [31, 50, -20], [15, 48, 40], [49, 49, -50], [35, 37, 25], [24, 33, -10], [41, 35, 70], [28, 44, 35]].map(function (c) {
+        return '<rect x="' + (c[0] - 1.4) + '" y="' + (c[1] - 1) + '" width="2.8" height="2" rx=".5" fill="#fff" stroke="#E1D2BE" stroke-width=".3" transform="rotate(' + c[2] + ' ' + c[0] + ' ' + c[1] + ')"/>';
+      }).join('')),
+    laugenstange: SV(DF(LG('ls', '#D78F4D', '#6C3216', 0, 0, 0, 1) + LG('lsc', '#F7DAA6', '#DAA562', 0, 0, 0, 1)) + SH(32, 27) +
+      '<g transform="rotate(-24 32 34)"><rect x="3" y="24" width="58" height="20" rx="10" fill="url(#ls)"/><rect x="8" y="25.6" width="48" height="5" rx="2.5" fill="#F2B87E" opacity=".6"/>' +
+      [15, 28, 41].map(function (x) { return '<path d="M' + x + ' 28Q' + (x + 3) + ' 34 ' + (x + 1) + ' 41L' + (x + 5) + ' 41Q' + (x + 6) + ' 34 ' + (x + 3) + ' 28Z" fill="url(#lsc)" stroke="#5E2D10" stroke-width=".8"/>'; }).join('') +
+      [[10, 36], [24, 31], [37, 35], [50, 31], [22, 40], [34, 41], [47, 40], [55, 36]].map(function (d, i) { return '<rect x="' + (d[0] - 1.4) + '" y="' + (d[1] - 1) + '" width="2.8" height="2" rx=".5" fill="#fff" stroke="#E1D2BE" stroke-width=".3" transform="rotate(' + (i * 37 % 80 - 40) + ' ' + d[0] + ' ' + d[1] + ')"/>'; }).join('') + '</g>'),
+    flabatta: SV(DF(LG('fl', '#F5D79B', '#C98F40', 0, 0, 0, 1) + LG('fle', '#BA7E32', '#8A581D', 0, 0, 0, 1)) + SH(32, 27) +
+      '<g transform="rotate(-6 32 34)"><path d="M6 27Q6 16 20 15L45 13Q59 13 59 26L58 41Q57 52 44 53L19 54Q6 53 6 41Z" fill="url(#fle)"/>' +
+      '<path d="M8 27Q8 18 21 17L45 15.5Q57 15.5 57 26L56 40Q55 50.5 44 51.5L19 52.5Q8 51.5 8 40Z" fill="url(#fl)"/>' +
+      '<path d="M12 22Q30 17 52 20" stroke="#fff" stroke-opacity=".5" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
+      [[17, 28, 5, 3], [30, 24, 4, 2.4], [44, 28, 6, 3.2], [22, 38, 6, 3], [38, 40, 5, 2.8], [50, 38, 4, 2.2], [31, 33, 3, 2]].map(function (b) {
+        return '<ellipse cx="' + b[0] + '" cy="' + b[1] + '" rx="' + b[2] + '" ry="' + b[3] + '" fill="#FFF8E8" opacity=".62"/>';
+      }).join('') +
+      [[14, 41, 3], [27, 44, 2.4], [41, 30, 2.8], [48, 45, 2.2]].map(function (b) {
+        return '<ellipse cx="' + b[0] + '" cy="' + b[1] + '" rx="' + b[2] + '" ry="' + (b[2] * .6) + '" fill="#F9E3B4" stroke="#A8702A" stroke-width=".8" stroke-opacity=".6"/>';
+      }).join('') +
+      '<path d="M16 33Q21 31 25 34M33 45Q38 43 43 46M46 22Q50 24 52 28" stroke="#9A6422" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".45"/></g>'),
+    baguette: SV(DF(LG('bg', '#EBBB78', '#955A1E', 0, 0, 0, 1) + LG('bge', '#FBE3AE', '#DCA458', 0, 0, 0, 1)) + SH(32, 27) +
+      '<g transform="rotate(-33 32 35)"><rect x="0" y="26" width="64" height="15" rx="7.5" fill="url(#bg)"/><path d="M5 28.4Q32 26 59 28.4" stroke="#FCE8BE" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".55"/>' +
+      [8, 21, 34, 47].map(function (x) { return '<path d="M' + x + ' 29.5Q' + (x + 3) + ' 27.6 ' + (x + 8) + ' 31L' + (x + 5) + ' 37.5Q' + (x + 1.5) + ' 35.5 ' + x + ' 29.5Z" fill="url(#bge)" stroke="#8F5516" stroke-width=".8" stroke-opacity=".7"/><path d="M' + (x + 1.5) + ' 30.8L' + (x + 5) + ' 36" stroke="#6B3A10" stroke-width="1.3" stroke-linecap="round" opacity=".55"/>'; }).join('') +
+      dots([[5, 35, .8], [16, 37, .9], [29, 38.5, .8], [41, 36.5, .9], [55, 37, .8], [12, 31, .7], [58, 32, .7]], '#FFF4DC', 1, .8) + '</g>'),
+    'pesto-genovese': jar('pg', '#7CB452', '#3E7A28', '#4E8F2F'),
+    'pesto-rosso': jar('pr', '#E5503B', '#9C1C12', '#C2321F'),
+    remoulade: jar('rm', '#F7E4A0', '#E3C566', '#E8C14E'),
+    ketchup: bottle('kt', '#E5392B', '#A9160F', '#C8281E', '#C8281E'),
+    'dr-joghurt': bottle('dj', '#FFFBEF', '#E9E1C8', '#5A6772', '#7FB6E8'),
+    'dr-french': bottle('df', '#F2B64D', '#D18A1E', '#5A6772', '#D9892B'),
+    'dr-sylter': bottle('ds', '#F6D3BC', '#E0A98B', '#5A6772', '#2F9AA6'),
+    'dr-senfhonig': bottle('dh', '#E8B52F', '#B5800E', '#5A6772', '#C28F13'),
+    frischkaese: SV(DF(LG('fk', '#4E86F0', '#1F4FC0', 0, 0, 0, 1) + RG('fc', 30, 24, 24, [[0, '#FFFFFF'], [1, '#EFEBDD']])) + SH(32, 22) +
+      '<path d="M9 30H55L51 55Q50.6 58 47 58H17Q13.4 58 13 55Z" fill="#fff" stroke="#C3D0DA" stroke-width="1.3"/>' +
+      '<path d="M10.2 38H53.8L51 55Q50.6 58 47 58H17Q13.4 58 13 55Z" fill="url(#fk)"/>' +
+      '<ellipse cx="32" cy="30" rx="23" ry="7" fill="#EFEBDD" stroke="#C3D0DA" stroke-width="1.3"/><ellipse cx="32" cy="29" rx="19" ry="5" fill="url(#fc)"/>' +
+      '<path d="M20 29Q26 25 32 28T44 28" stroke="#D9D3BE" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M17 44H47" stroke="#fff" stroke-opacity=".45" stroke-width="2" stroke-linecap="round"/>'),
+    mozzarella: SV(DF(RG('mz', 25, 26, 30, [[0, '#FFFFFF'], [.65, '#F4F1E6'], [1, '#D6D0B8']]) + LG('mb', '#6FBF52', '#2E7A30', 0, 0, 1, 1)) + SH(32, 20) +
+      '<circle cx="32" cy="35" r="21" fill="url(#mz)"/><path d="M18 31Q23 22 34 22" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".9"/>' +
+      '<path d="M41 11Q58 10 55 27Q39 30 41 11Z" fill="url(#mb)"/><path d="M43 14Q50 20 53 25" stroke="#D5F0B0" stroke-width="1.2" fill="none" opacity=".8"/>'),
+    burrata: SV(DF(RG('bu', 25, 30, 30, [[0, '#FFFFFF'], [.65, '#F4F1E6'], [1, '#D6D0B8']]) + RG('bt', 30, 14, 14, [[0, '#FBF9F1'], [1, '#DDD6BE']])) + SH(32, 20) +
+      '<circle cx="32" cy="39" r="20" fill="url(#bu)"/><path d="M19 37Q23 29 33 29" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".9"/>' +
+      '<path d="M22 24Q25 9 32 14Q39 9 42 24Q32 28 22 24Z" fill="url(#bt)" stroke="#D3CBB1" stroke-width="1"/><path d="M27 21Q32 17 37 21" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>'),
+    gouda: SV(DF(LG('g1', '#F2B02E', '#D88E14', 0, 0, 1, 1) + LG('g2', '#FFD966', '#F5B52A', 0, 0, 1, 1)) + SH(32, 22) +
+      '<rect x="9" y="22" width="40" height="33" rx="3.5" fill="url(#g1)" transform="rotate(-9 29 38)"/><rect x="14" y="12" width="40" height="34" rx="3.5" fill="url(#g2)" transform="rotate(6 34 29)"/>' +
+      '<circle cx="26" cy="25" r="3" fill="#E39A1A"/><circle cx="25" cy="24" r="1.2" fill="#FFE9A0"/><circle cx="43" cy="37" r="3.6" fill="#E39A1A"/><circle cx="42" cy="36" r="1.4" fill="#FFE9A0"/><circle cx="22" cy="40" r="2" fill="#D98F14"/>' +
+      '<path d="M18 17L36 15" stroke="#fff" stroke-opacity=".5" stroke-width="1.6" stroke-linecap="round"/>'),
+    kochschinken: SV(DF(LG('ks1', '#E9908F', '#C9605F', 0, 0, 1, 1) + LG('ks2', '#FDCFC8', '#F29591', 0, 0, 1, 1)) + SH(32, 27) +
+      '<path d="M9 21C14 11 31 9 43 14C53 18 58 24 57 34C56 46 45 54 30 53C16 52 5 42 9 21Z" fill="url(#ks1)"/>' +
+      '<path d="M5 31C7 21 21 17 34 21C46 25 59 22 59 34C59 47 47 57 31 57C15 57 3 46 5 31Z" fill="url(#ks2)"/>' +
+      '<path d="M5.4 33C6 44 17 56 31 56C46 56 58 46 58.6 35" stroke="#FFF0E9" stroke-width="2.4" fill="none" stroke-linecap="round"/>' +
+      [30, 34.5, 39, 43.5, 48].map(function (y, i) { return '<path d="M' + (10 + i % 2 * 2) + ' ' + y + 'Q30 ' + (y - 5) + ' ' + (54 - i % 2 * 2) + ' ' + (y + 2) + '" stroke="' + (i % 2 ? '#E58B84' : '#FFE1DB') + '" stroke-width="1.1" fill="none" stroke-linecap="round" opacity=".5"/>'; }).join('') +
+      '<ellipse cx="19" cy="27" rx="7" ry="3" transform="rotate(-18 19 27)" fill="#fff" opacity=".28"/>'),
+    salami: SV(DF(RG('sa1', 26, 38, 22, [[0, '#E0665A'], [.6, '#B72F33'], [1, '#8E1F26']]) + RG('sa2', 38, 24, 19, [[0, '#D4574D'], [.6, '#A32A2E'], [1, '#7C1A20']]) + LG('sa3', '#B9806A', '#7A3F31', 0, 0, 1, 1)) + SH(32, 24) +
+      '<circle cx="38" cy="26" r="19" fill="url(#sa3)"/><circle cx="38" cy="26" r="17" fill="url(#sa2)"/>' +
+      dots([[32, 21, 2], [42, 19, 1.8], [46, 29, 2.2], [37, 31, 1.7], [31, 30, 1.4]], '#F6DCCF', 2, .95) +
+      '<circle cx="28" cy="37" r="22" fill="url(#sa3)"/><circle cx="28" cy="37" r="20" fill="url(#sa1)"/><circle cx="28" cy="37" r="20" fill="none" stroke="#5E1219" stroke-opacity=".35" stroke-width="1"/>' +
+      dots([[19, 29, 2.6], [30, 25, 2.2], [38, 35, 2.8], [26, 38, 2.1], [17, 41, 2.3], [31, 46, 2.7], [41, 44, 1.9], [22, 49, 1.8], [35, 31, 1.5]], '#FBE8DD', 2, .96) +
+      dots([[19, 29, 2.6], [38, 35, 2.8], [31, 46, 2.7]], '#E9C3B3', 1, .5) +
+      dots([[24, 31, .8], [33, 40, .8], [21, 37, .7], [37, 42, .8], [28, 29, .7], [34, 50, .7], [43, 38, .7], [16, 36, .7]], '#3E0E12', .8, .85) +
+      '<path d="M14 36Q16 25 26 21" stroke="#fff" stroke-opacity=".28" stroke-width="2.2" fill="none" stroke-linecap="round"/>'),
+    haehnchen: SV(DF(RG('hc1', 26, 24, 34, [[0, '#FBE6CC'], [.7, '#EBC298'], [1, '#D3A06C']])) + SH(32, 27) +
+      '<path d="M9 25Q11 12 28 13Q50 11 55 26Q59 42 44 51Q26 57 13 46Q7 38 9 25Z" fill="url(#hc1)" stroke="#B98550" stroke-opacity=".5" stroke-width="1"/>' +
+      '<path d="M16 22L28 46M27 19L39 48M38 22L47 43" stroke="#8D5A30" stroke-width="3.6" stroke-linecap="round" opacity=".7"/><path d="M16 22L28 46M27 19L39 48M38 22L47 43" stroke="#C9935A" stroke-width="1.4" stroke-linecap="round" opacity=".7" transform="translate(-1 0)"/>' +
+      '<path d="M12 30Q22 25 34 28M14 38Q26 34 40 37" stroke="#FFF3E2" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".5"/>' +
+      dots([[20, 18, .8], [34, 16, .7], [46, 20, .8], [50, 36, .7], [24, 50, .7]], '#7A8E3A', 1, .8) +
+      '<path d="M13 28Q20 19 31 17" stroke="#fff" stroke-opacity=".45" stroke-width="2.4" fill="none" stroke-linecap="round"/>'),
+    myvay: SV(DF(LG('mv', '#DDAC99', '#B67761', 0, 0, 1, 1) + LG('ml', '#6CC060', '#2F8A34', 0, 0, 1, 1)) + SH(32, 24) +
+      '<rect x="8" y="14" width="48" height="38" rx="15" fill="url(#mv)"/><rect x="13" y="18" width="30" height="7" rx="3.5" fill="#EBC4B3" opacity=".7"/>' +
+      dots([[18, 36, 1.2], [26, 42, 1.1], [31, 33, 1], [22, 30, 1.1]], '#9B5E4B', 1.1, .45) +
+      '<path d="M35 25Q54 24 52 43Q33 46 35 25Z" fill="url(#ml)"/><path d="M38 41Q43 33 49 29" stroke="#CFF0B6" stroke-width="1.6" fill="none" stroke-linecap="round"/>'),
+    gurke: SV(DF(RG('gkr', 28, 36, 22, [[0, '#4C9A45'], [1, '#2A6A2C']]) + RG('gkf', 28, 36, 19, [[0, '#EAF6C8'], [1, '#BFE08C']]) + RG('gk2r', 40, 26, 17, [[0, '#4C9A45'], [1, '#2A6A2C']]) + RG('gk2f', 40, 26, 14, [[0, '#EAF6C8'], [1, '#BFE08C']])) + SH(32, 24) +
+      cuc('gk2', 40, 26, 17) + cuc('gk', 28, 37, 21) +
+      '<path d="M13 32Q15 24 22 21" stroke="#fff" stroke-opacity=".5" stroke-width="2" fill="none" stroke-linecap="round"/>'),
+    eisberg: SV(DF(LG('e1', '#B8DA7C', '#6FA23A', 0, 0, 0, 1) + LG('e2', '#E4F4BC', '#B2D676', 0, 0, 0, 1) + LG('e3', '#F2FADB', '#CDE59A', 0, 0, 0, 1)) + SH(32, 23) +
+      '<path d="M9 37C7 27 11 17 19 13C24 9 29 8 32 8C38 8 46 11 52 19C57 26 58 36 53 44C48 52 40 57 32 57C22 57 11 51 9 37Z" fill="url(#e1)"/>' +
+      '<path d="M15 36C13 28 17 20 24 17C28 14 32 14 36 15C43 17 49 23 49 32C49 43 41 51 32 52C23 52 16 46 15 36Z" fill="url(#e2)"/>' +
+      '<path d="M21 36C20 29 24 24 30 23C37 22 43 27 42 35C41 43 35 47 30 46C25 46 21 42 21 36Z" fill="url(#e3)"/>' +
+      '<path d="M32 12V50M32 28L23 21M32 36L42 28M32 43L25 38M32 22L38 17" stroke="#8AB84E" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".75"/>' +
+      '<path d="M11 24Q16 14 27 10M50 17Q56 24 56 33M13 46Q20 55 31 56" stroke="#E6F5C2" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".7"/>' +
+      '<path d="M13 22Q21 12 33 11" stroke="#fff" stroke-opacity=".4" stroke-width="2.2" fill="none" stroke-linecap="round"/>'),
+    paprika: SV(DF(RG('pk1', 23, 28, 44, [[0, '#FF8068'], [.5, '#E3301F'], [1, '#98120E']]) + LG('pk2', '#76C45A', '#2E7A30', 0, 0, 1, 1)) + SH(32, 20) +
+      '<path d="M32 17C22 12 9 20 10 37C11 51 19 58 27 58C30 58 31 56 32 56C33 56 34 58 37 58C45 58 53 51 54 37C55 20 42 12 32 17Z" fill="url(#pk1)"/>' +
+      '<path d="M32 21C28 31 28 45 32 56M22 22C15 32 17 47 23 57M42 22C49 32 47 47 41 57" stroke="#7E0F0B" stroke-width="1.3" fill="none" opacity=".3" stroke-linecap="round"/>' +
+      '<ellipse cx="19.5" cy="32" rx="3" ry="9.5" transform="rotate(12 19.5 32)" fill="#fff" opacity=".34"/><ellipse cx="44" cy="26" rx="1.6" ry="4" transform="rotate(-20 44 26)" fill="#fff" opacity=".2"/>' +
+      '<path d="M22 21C26 15 38 15 43 21C38 24 28 24 22 21Z" fill="#3E8E3A"/>' +
+      '<path d="M30 18C30 11 33 8 39 6L41.5 9.5C37.5 10.5 35.5 13 35.5 18Z" fill="url(#pk2)"/><path d="M33 16C33 12 35 10.5 38 9" stroke="#D5F0B0" stroke-width="1" fill="none" opacity=".7"/>')
+  };
+  /* Sandwich-Bilder aus den Zutaten (Seitenansicht) */
+  var BREADS = {
+    laugenecke: ['#C9803F', '#7A3F17', 'salt'],
+    laugenstange: ['#CB8445', '#74381A', 'salt'],
+    flabatta: ['#F0CA88', '#B98438', 'flour'],
+    baguette: ['#E3AE68', '#9A5E22', 'score']
+  };
+  var SAUCEC = { 'pesto-genovese': '#4E8F2F', 'pesto-rosso': '#C2321F', remoulade: '#F1D98A', ketchup: '#C8281E', 'dr-joghurt': '#F6F1E2', 'dr-french': '#E8A23A', 'dr-sylter': '#EBC2A8', 'dr-senfhonig': '#D9A21B', aioli: '#F3E9C6' };
+  var swWave = function (y0, y1, fill, stroke) {
+    var m = y0 + 1.6;
+    return '<path d="M4 ' + y1 + 'V' + m + 'Q10 ' + (y0 - 1.2) + ' 16 ' + m + 'T28 ' + m + 'T40 ' + m + 'T52 ' + m + 'T60 ' + m + 'V' + y1 + 'Z" fill="' + fill + '"' + (stroke ? ' stroke="' + stroke + '" stroke-width=".8"' : '') + '/>';
+  };
+  var swRect = function (x, y0, w, y1, fill, stroke) { return '<rect x="' + x + '" y="' + y0 + '" width="' + w + '" height="' + (y1 - y0) + '" rx="1.6" fill="' + fill + '"' + (stroke ? ' stroke="' + stroke + '" stroke-width=".8"' : '') + '/>'; };
+  var LAY = {
+    kochschinken: function (a, b) { return swWave(a, b, '#F2A7A0', '#E58B84'); },
+    putenkochschinken: function (a, b) { return swWave(a, b, '#F7D5C8', '#E8B9AA'); },
+    serrano: function (a, b) { return swWave(a, b, '#C4505B', '#8F2F3A') + '<path d="M6 ' + (b - 1) + 'H58" stroke="#F6DCD8" stroke-width="1.1" stroke-linecap="round"/>'; },
+    prosciutto: function (a, b) { return swWave(a, b, '#DB7983', '#B4545E') + '<path d="M6 ' + (b - 1) + 'H58" stroke="#FBE3DF" stroke-width="1.1" stroke-linecap="round"/>'; },
+    salami: function (a, b) {
+      var r = (b - a) / 2, c = (a + b) / 2;
+      return [10, 20, 30, 40, 50].map(function (x) { return '<ellipse cx="' + x + '" cy="' + c + '" rx="6.4" ry="' + r + '" fill="#A82A2E" stroke="#7B1A20" stroke-width=".8"/><circle cx="' + (x - 1.8) + '" cy="' + c + '" r=".9" fill="#F6DCCF"/><circle cx="' + (x + 2) + '" cy="' + (c + .6) + '" r=".7" fill="#F6DCCF"/>'; }).join('');
+    },
+    haehnchen: function (a, b) { return swRect(6, a, 52, b, '#F0CFB0', '#C99468') + '<path d="M16 ' + a + 'L19 ' + b + 'M30 ' + a + 'L33 ' + b + 'M44 ' + a + 'L47 ' + b + '" stroke="#B87C4C" stroke-width="1.2" opacity=".6"/>'; },
+    myvay: function (a, b) { return swRect(6, a, 52, b, '#C98E7A', '#A96F5C'); },
+    gouda: function (a, b) { return swRect(3, a, 58, b, '#F6BD3B', '#D99A1B') + '<circle cx="20" cy="' + ((a + b) / 2) + '" r="1.3" fill="#E09A1B"/><circle cx="44" cy="' + ((a + b) / 2) + '" r="1" fill="#E09A1B"/>'; },
+    mozzarella: function (a, b) { return swRect(8, a, 48, b, '#FBF8EE', '#DDD7C2'); },
+    burrata: function (a, b) { var r = (b - a) * .6, c = (a + b) / 2; return [18, 32, 46].map(function (x) { return '<ellipse cx="' + x + '" cy="' + c + '" rx="11" ry="' + r + '" fill="#FBF8EE" stroke="#DDD7C2" stroke-width=".8"/>'; }).join(''); },
+    frischkaese: function (a, b) { return swRect(6, a + 1, 52, b - .5, '#FFFFFF', '#E5E1D3'); },
+    gurke: function (a, b) { var r = (b - a) / 2, c = (a + b) / 2; return [10, 21, 32, 43, 54].map(function (x) { return '<ellipse cx="' + x + '" cy="' + c + '" rx="6.2" ry="' + r + '" fill="#CFE8A8" stroke="#2F7A32" stroke-width="1.2"/>'; }).join(''); },
+    eisberg: function (a, b) { return swWave(a - 1, b, '#A8D26A', '#86B34A'); },
+    rucola: function (a, b) { return swWave(a - 1, b, '#3F8F3A', '#2A6A2C') + '<path d="M10 ' + (a + 2) + 'L14 ' + (a - 1) + 'M30 ' + (a + 2) + 'L34 ' + (a - 1) + 'M48 ' + (a + 2) + 'L52 ' + (a - 1) + '" stroke="#6EBB52" stroke-width="1.6" stroke-linecap="round"/>'; },
+    paprika: function (a, b) { return [[8, 18], [28, 18], [47, 14]].map(function (s) { return '<rect x="' + s[0] + '" y="' + a + '" width="' + s[1] + '" height="' + (b - a) + '" rx="' + ((b - a) / 2) + '" fill="#D8281F" stroke="#98120E" stroke-width=".6"/>'; }).join(''); },
+    sauce: function (a, b, col) { return swWave(b - Math.min(b - a, 3.6), b, col, 'rgba(0,0,0,.2)'); }
+  };
+  function sandwichArt(cfg, uid) {
+    var br = BREADS[cfg.bread] || ['#E3AE68', '#9A5E22', 'score'];
+    var catOf = function (id) { return id.indexOf('sauce:') === 0 ? 'sauce' : byId(id).cat; };
+    var order = [];
+    if (cfg.sauce && byId(cfg.sauce)) order.push('sauce:' + cfg.sauce);
+    ['spread', 'meat', 'cheese', 'veg'].forEach(function (c) {
+      Object.keys(cfg.items || {}).forEach(function (id) { var p = byId(id); if (p && p.cat === c) order.push(id); });
+    });
+    while (order.length > 5) {
+      var rm = -1;
+      for (var i = order.length - 1; i > 0; i--) {
+        var c = catOf(order[i]);
+        if (order.slice(0, i).some(function (o) { return catOf(o) === c; })) { rm = i; break; }
+      }
+      order.splice(rm < 0 ? order.length - 1 : rm, 1);
+    }
+    var hs = order.map(function (id) { return id.indexOf('sauce:') === 0 ? 3.6 : 6 * Math.min(1.35, 0.8 + 0.09 * ((cfg.items || {})[id] || 1)); });
+    var tot = hs.reduce(function (a, b) { return a + b; }, 0), k = tot > 32 ? 32 / tot : 1;
+    var g = 'sw' + uid, cur = 49;
+    var s = DF(LG(g, br[0], br[1], 0, 0, 0, 1)) + SH(32, 27);
+    s += '<path d="M6 51Q6 49 9 49H55Q58 49 58 51V54Q58 57.5 54 57.5H10Q6 57.5 6 54Z" fill="url(#' + g + ')"/><path d="M10 50.2H54" stroke="#fff" stroke-opacity=".3" stroke-width="1"/>';
+    order.forEach(function (id, idx) {
+      var y1 = cur, y0 = cur - hs[idx] * k, fn, col;
+      if (id.indexOf('sauce:') === 0) { fn = LAY.sauce; col = SAUCEC[id.slice(6)] || '#C8281E'; } else fn = LAY[id] || function (a, b) { return swRect(6, a, 52, b, '#D9D2C0', '#B5AE9A'); };
+      s += fn(y0, y1, col); cur = y0;
+    });
+    var top = cur - 15;
+    s += '<path d="M6 ' + cur + 'Q6 ' + top + ' 32 ' + top + 'Q58 ' + top + ' 58 ' + cur + 'Q58 ' + (cur + 2.6) + ' 54 ' + (cur + 3) + 'H10Q6 ' + (cur + 2.6) + ' 6 ' + cur + 'Z" fill="url(#' + g + ')"/>';
+    s += '<path d="M12 ' + (cur - 4) + 'Q18 ' + (cur - 11) + ' 30 ' + (cur - 12) + '" stroke="#fff" stroke-opacity=".38" stroke-width="2" fill="none" stroke-linecap="round"/>';
+    if (br[2] === 'salt') s += [[22, -6], [32, -9], [42, -6], [27, -3], [38, -3], [17, -2], [47, -2]].map(function (d) { return '<rect x="' + (d[0] - 1.3) + '" y="' + (cur + d[1]) + '" width="2.6" height="1.8" rx=".4" fill="#fff" transform="rotate(' + (d[0] * 7 % 70 - 35) + ' ' + d[0] + ' ' + (cur + d[1]) + ')"/>'; }).join('');
+    else if (br[2] === 'flour') s += [[20, -6, 3], [32, -10, 3.4], [43, -6, 2.8], [26, -3, 2.2], [38, -3, 2.4]].map(function (d) { return '<ellipse cx="' + d[0] + '" cy="' + (cur + d[1]) + '" rx="' + d[2] + '" ry="' + (d[2] * .6) + '" fill="#FFF8E8" opacity=".65"/>'; }).join('');
+    else s += '<path d="M18 ' + (cur - 2) + 'L23 ' + (cur - 9) + 'M29 ' + (cur - 2) + 'L34 ' + (cur - 11) + 'M40 ' + (cur - 2) + 'L45 ' + (cur - 9) + '" stroke="#F6DCAA" stroke-width="2.6" stroke-linecap="round"/>';
+    return SV(s);
+  }
+  function cartCfg() {
+    var items = {};
+    Object.keys(sel.qty).forEach(function (id) { var p = byId(id); if (p && p.cat !== 'bread' && p.cat !== 'sauce' && p.cat !== 'dessert' && sel.qty[id] > 0) items[id] = sel.qty[id]; });
+    return { bread: sel.bread, sauce: sel.sauce, items: items };
+  }
+  function nutDetail(p) {
+    var mu = p.mu || 'g', est = function (n) { return (p.est || []).indexOf(n.k) >= 0; };
+    var rows = NUT.map(function (n) {
+      return '<tr class="' + (n.sub ? 'sub' : '') + '"><td>' + n.l + '</td><td class="v">' + nf(p[n.k] || 0, n.d) + ' ' + n.u + (est(n) ? '<span class="est">~</span>' : '') + '</td><td class="v">' + nf(unitNut(p, n.k), n.d) + ' ' + n.u + '</td></tr>';
+    }).join('');
+    var estN = NUT.filter(est).map(function (n) { return n.l.replace('davon ', ''); });
+    var pu = Math.round(packUnits(p) * 10) / 10;
+    return '<details class="nutd"><summary>Nährwerte und Quelle</summary><div class="nd"><table><thead><tr><th></th><th>pro 100 ' + mu + '</th><th>pro ' + esc(p.unit) + '</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+      '<p class="srcl"><b>Quelle:</b> ' + esc(p.src || 'keine Angabe') + '</p>' +
+      (estN.length ? '<p class="srcl"><span class="est">~</span> Geschätzt: ' + esc(estN.join(', ')) + '</p>' : '<p class="srcl">Alle Werte aus der Quelle übernommen.</p>') +
+      '<p class="srcl"><b>Gewicht:</b> 1 ' + esc(p.unit) + ' = ' + nf(p.unitG, 0) + ' ' + mu + '</p><p class="srcl"><b>Packung:</b> ' + nf(p.packG, 0) + ' ' + mu + ' = ca. ' + nf(pu, Number.isInteger(pu) ? 0 : 1) + ' ' + esc(uLabel(p, pu)) + ' · ' + eur(p.packPrice / packUnits(p)) + ' pro ' + esc(p.unit) + (p.pa ? ' · Preis angenommen' : '') + '</p></div></details>';
+  }
+  function reach(ls) {
+    var items = ls.filter(function (l) { return l.p.cat !== 'bread' && l.p.cat !== 'dessert'; }).map(function (l) { return { p: l.p, q: l.q, n: Math.max(0, Math.floor(packUnits(l.p) / l.q + 1e-9)) }; });
+    if (!items.length) return null;
+    var min = Math.min.apply(null, items.map(function (i) { return i.n; }));
+    return { n: min, lim: items.filter(function (i) { return i.n === min; }), items: items };
+  }
+  function sandWord(n) { return n === 1 ? 'Sandwich' : 'Sandwiches'; }
+  function phInner(img, name, id) {
+    if (okImg(img)) return '<img src="' + esc(img) + '" alt="' + esc(name || '') + '" loading="lazy">';
+    if (id && ILL[id]) return ILL[id];
+    return esc((name || '·').charAt(0).toUpperCase());
+  }
+  function buyHTML(p) {
+    var q = curQ(p), on = q > 0;
+    if (p.cat === 'bread') return '<button type="button" class="pick" data-act="pick" aria-pressed="' + on + '">' + (on ? 'Gewählt' : 'Wählen') + '</button>';
+    if (p.cat === 'sauce') return '<button type="button" class="pick" data-act="pick" aria-pressed="' + on + '">' + (on ? 'Gewählt' : 'Wählen') + '</button>' + (on ? stepperHTML(p, q) : '');
+    return on ? stepperHTML(p, q) : '<button type="button" class="pick" data-act="add">Hinzufügen</button>';
+  }
+  function cardHTML(p) {
+    var perU = Math.round(unitNut(p, 'kcal'));
+    return '<article class="card' + (inSel(p) ? ' on' : '') + '" data-id="' + esc(p.id) + '"><div class="media' + (okImg(p.img) ? ' full' : '') + '">' +
+      (p.veg ? '<span class="tag"><i>✓</i>VEG</span>' : '') + '<div class="art">' + phInner(p.img, p.name, p.id) + '</div></div>' +
+      '<div class="meta"><h3>' + esc(p.name) + '</h3><span class="price">' + eur(p.packPrice) + '</span></div>' +
+      '<p class="sub">' + nf(p.packG, 0) + ' ' + (p.mu || 'g') + ' · ' + perU + ' kcal / ' + esc(p.unit) + '</p>' +
+      '<div class="buy">' + buyHTML(p) + '</div>' +
+      '<p class="avail' + (p.pa ? ' warn' : '') + '"><i></i>' + (p.pa ? 'Preis angenommen' : 'Preis Aldi Süd') + '</p>' + nutDetail(p) + '</article>';
+  }
+  function visibleProducts() {
+    var vo = $('#vegOnly').checked;
+    var list = products.filter(function (p) {
+      if (view !== 'all' && view !== 'sandwiches' && p.cat !== view) return false;
+      if (vo && !p.veg) return false;
+      if (F.picked && !inSel(p)) return false;
+      if (F.protein && !(p.protein >= 15)) return false;
+      if (F.light && !(p.kcal <= 120)) return false;
+      return true;
+    });
+    if (F.sort === 'price') list.sort(function (a, b) { return a.packPrice - b.packPrice; });
+    else if (F.sort === 'kcal') list.sort(function (a, b) { return a.kcal - b.kcal; });
+    else if (F.sort === 'protein') list.sort(function (a, b) { return b.protein - a.protein; });
+    return list;
+  }
+  function renderPills() {
+    $('#pills').innerHTML = VIEWS.map(function (v) { return '<button type="button" class="pill" data-view="' + v.id + '" aria-pressed="' + (view === v.id) + '">' + v.name + '</button>'; }).join('');
+  }
+  function setHead(title, n, word) {
+    $('#listTitle').textContent = title;
+    $('#listCount').textContent = n + ' ' + (n === 1 ? word[0] : word[1]);
+  }
+  function viewName() { return VIEWS.filter(function (v) { return v.id === view; })[0].name; }
+  function buildChooser() {
+    renderPills();
+    if (view === 'sandwiches') { buildPresets(); return; }
+    var list = visibleProducts();
+    setHead(viewName(), list.length, ['Produkt', 'Produkte']);
+    $('#grid').innerHTML = list.map(cardHTML).join('') || '<p class="empty">Keine Produkte für diese Filter.</p>';
+  }
+  function syncChooser() {
+    if (view === 'sandwiches') return;
+    if (F.picked) { buildChooser(); return; }
+    document.querySelectorAll('#grid .card').forEach(function (c) {
+      var p = byId(c.dataset.id); if (!p) return;
+      c.classList.toggle('on', inSel(p));
+      c.querySelector('.buy').innerHTML = buyHTML(p);
+    });
+  }
+
+  /* Sandwiches (Vorlagen) */
+  function calcCfg(cfg) {
+    var tmp = sel; sel = { bread: null, sauce: null, qty: {} };
+    if (byId(cfg.bread)) sel.bread = cfg.bread;
+    if (cfg.sauce && byId(cfg.sauce)) { sel.sauce = cfg.sauce; sel.qty[cfg.sauce] = cfg.sq || 1; }
+    Object.keys(cfg.items || {}).forEach(function (id) { if (byId(id)) sel.qty[id] = cfg.items[id]; });
+    var ls = lines(), t = totals(ls); sel = tmp; return { ls: ls, t: t };
+  }
+  var DICE = SV('<rect x="8" y="8" width="48" height="48" rx="11" fill="#fff" stroke="#C9CFD4" stroke-width="2"/><rect x="8" y="8" width="48" height="48" rx="11" fill="none" stroke="#4C8A3C" stroke-width="2" opacity=".0"/>' + dots([[22, 22], [42, 22], [32, 32], [22, 42], [42, 42]], '#4C8A3C', 4.2));
+  function buildPresets() {
+    if (view !== 'sandwiches') return;
+    var cards = ['<article class="card"><div class="media"><div class="art">' + DICE + '</div></div><div class="meta"><h3>Zufälliges Sandwich</h3></div><p class="sub">Brot, Sauce und 4 bis 5 Zutaten, passend zu deinen Filtern.</p><div class="buy"><button type="button" class="pick solid" data-act="random">Würfeln</button></div></article>'];
+    PRESETS.forEach(function (cfg, i) {
+      if (!byId(cfg.bread)) return;
+      var c = calcCfg(cfg), r = reach(c.ls);
+      var veg = c.ls.every(function (l) { return l.p.veg; });
+      var names = c.ls.map(function (l) { return l.p.name; }).join(', ');
+      cards.push('<article class="card"><div class="media wide">' + (veg ? '<span class="tag"><i>✓</i>VEG</span>' : '') + '<div class="art">' + sandwichArt(cfg, i) + '</div></div>' +
+        '<div class="meta"><h3>' + esc(cfg.name) + '</h3></div>' +
+        '<div class="prices"><span><small>Pro Sandwich</small><b>' + eur(c.t.share) + '</b></span><span><small>Packungen</small><b>' + eur(c.t.pack) + '</b></span></div>' +
+        '<p class="sub" style="margin:0 0 6px">' + nf(c.t.nut.kcal, 0) + ' kcal · ' + nf(c.t.nut.protein, 0) + ' g Eiweiß</p>' +
+        (r ? '<p class="reachline">Reicht für <b>' + r.n + '</b> ' + sandWord(r.n) + ' · begrenzt durch ' + esc(r.lim.map(function (x) { return x.p.name; }).join(', ')) + '</p>' : '') +
+        '<p class="sub names">' + esc(names) + '</p>' +
+        '<div class="buy"><button type="button" class="pick" data-act="preset" data-i="' + i + '">Übernehmen</button></div></article>');
+    });
+    setHead('Sandwiches', cards.length - 1, ['Vorlage', 'Vorlagen']);
+    $('#grid').innerHTML = cards.join('');
+  }
+
+  function changeQty(p, act) {
+    if (act === 'pick') {
+      if (p.cat === 'bread') sel.bread = p.id;
+      else if (sel.sauce === p.id) sel.sauce = null;
+      else { sel.sauce = p.id; if (!sel.qty[p.id]) sel.qty[p.id] = 1; }
+    } else if (act === 'add') {
+      sel.qty[p.id] = Math.min(30, p.def || 1);
+    } else if (act === 'remove') {
+      if (p.cat === 'sauce') sel.sauce = null; else sel.qty[p.id] = 0;
+    } else {
+      var cur = p.cat === 'sauce' ? (sel.qty[p.id] || 1) : (sel.qty[p.id] || 0);
+      var nq = cur + (act === 'inc' ? stepOf(p) : -stepOf(p));
+      sel.qty[p.id] = Math.min(30, Math.max(p.cat === 'sauce' ? stepOf(p) : 0, nq));
+    }
+    syncChooser(); renderSummary();
+  }
+  function focusBack(sel1, act) {
+    var el = document.querySelector(sel1 + ' [data-act="' + (act === 'add' ? 'inc' : act) + '"]');
+    if (el && !el.disabled) el.focus();
+  }
+  $('#grid').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-act]'); if (!b) return;
+    var act = b.dataset.act;
+    if (act === 'random') { randomize(); return; }
+    if (act === 'preset') { applyConfig(PRESETS[+b.dataset.i]); toast('Sandwich übernommen'); return; }
+    var card = b.closest('.card'); var p = byId(card.dataset.id); if (!p) return;
+    changeQty(p, act);
+    focusBack('#grid .card[data-id="' + p.id + '"]', act);
+  });
+  $('#cartLines').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-act]'); if (!b) return;
+    var li = b.closest('.line'); var p = byId(li.dataset.id); if (!p) return;
+    changeQty(p, b.dataset.act);
+    if (b.dataset.act !== 'remove') focusBack('#cartLines .line[data-id="' + p.id + '"]', b.dataset.act);
+  });
+  $('#pills').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-view]'); if (!b) return;
+    view = b.dataset.view; buildChooser();
+  });
+  function goTo(id) { var el = $(id); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-nav]'); if (!b) return;
+    var n = b.dataset.nav;
+    if (n === 'sandwiches' || n === 'products') { view = n === 'sandwiches' ? 'sandwiches' : 'all'; buildChooser(); goTo('#pills'); }
+    else if (n === 'nutri') goTo('#nutri');
+    else if (n === 'cart') goTo('#cart');
+    else if (n === 'manage') { $('#mgr').open = true; goTo('#mgr'); }
+  });
+  [['#vegOnly', null], ['#fPicked', 'picked'], ['#fProt', 'protein'], ['#fLight', 'light']].forEach(function (f) {
+    $(f[0]).addEventListener('change', function (e) { if (f[1]) F[f[1]] = e.target.checked; buildChooser(); });
+  });
+  $('#sort').addEventListener('change', function (e) { F.sort = e.target.value; buildChooser(); });
+  var mq = window.matchMedia ? window.matchMedia('(min-width: 1100px)') : null;
+  function fitSide() { $('#side').open = !mq || mq.matches ? true : $('#side').open; }
+  if (mq) { if (mq.addEventListener) mq.addEventListener('change', fitSide); if (!mq.matches) $('#side').open = false; }
+
+  /* Warenkorb */
+  var isD = function (l) { return l.p.cat === 'dessert'; };
+  function lineHTML(l, rc) {
+    var p = l.p, bread = p.cat === 'bread', des = p.cat === 'dessert';
+    var it = rc && rc.items.filter(function (i) { return i.p.id === p.id; })[0];
+    var rtxt = it ? ' · reicht für ' + it.n + '×' : '';
+    return '<li class="line" data-id="' + esc(p.id) + '"><span class="nm">' + esc(p.name) + '</span><span class="pr">' + eur(share(p, l.q)) + '</span>' +
+      '<span class="sm">' + (bread ? '1 ' + esc(p.unit) : qf(l.q) + ' ' + esc(uLabel(p, l.q))) + ' · Packung ' + eur(p.packPrice) + rtxt + '</span>' +
+      (bread ? '' : '<div class="ctl">' + stepperHTML(p, l.q) + '<button type="button" class="rm" data-act="remove" aria-label="' + esc(p.name) + ' entfernen">×</button></div>') + '</li>';
+  }
+  function renderSummary() {
+    var ls = lines(), sand = ls.filter(function (l) { return !isD(l); }), des = ls.filter(isD);
+    var t = totals(sand), td = totals(des), tg = totals(ls), rc = reach(ls), hasD = des.length > 0;
+    $('#swName').textContent = sandwichName(ls);
+    $('#cartBadge').textContent = ls.length;
+    $('#swArt').innerHTML = sandwichArt(cartCfg(), 'c');
+    $('#cartLines').innerHTML = ls.length ?
+      sand.map(function (l) { return lineHTML(l, rc); }).join('') + (hasD ? '<li class="grp">Nachtisch</li>' + des.map(function (l) { return lineHTML(l, rc); }).join('') : '') :
+      '<li class="none">Noch keine Zutaten gewählt.</li>';
+    $('#cartCount').textContent = sand.length + (sand.length === 1 ? ' Zutat' : ' Zutaten') + ' · ca. ' + nf(t.weight, 0) + ' g';
+    $('#sumShare').textContent = eur(t.share);
+    $('#dessRow').hidden = !hasD; $('#gesRow').hidden = !hasD;
+    $('#sumDess').textContent = eur(td.share); $('#sumGes').textContent = eur(tg.share);
+    $('#sumPack').textContent = eur(tg.pack);
+    var rb = $('#reach');
+    if (rc) {
+      rb.hidden = false;
+      rb.innerHTML = '<small>Eine Packung je Produkt reicht für</small><b>' + rc.n + ' ' + sandWord(rc.n) + '</b>' +
+        '<span>' + (rc.n === 0 ? 'Für ein Sandwich fehlt: ' : 'Danach fehlt: ') + esc(rc.lim.map(function (x) { return x.p.name; }).join(', ')) + '</span>';
+    } else { rb.hidden = true; rb.innerHTML = ''; }
+    var kp = [['Energie', nf(t.nut.kcal, 0) + ' kcal'], ['Eiweiß', nf(t.nut.protein, 1) + ' g'], ['Kohlenhydrate', nf(t.nut.carbs, 1) + ' g'], ['Fett', nf(t.nut.fat, 1) + ' g']];
+    $('#kpis').innerHTML = kp.map(function (k) { return '<div><small>' + k[0] + '</small><b>' + k[1] + '</b></div>'; }).join('') +
+      (hasD ? '<div style="grid-column:1/-1"><small>Gesamt mit Nachtisch</small><b>' + nf(tg.nut.kcal, 0) + ' kcal</b></div>' : '');
+    $('#nutHead').innerHTML = '<tr><th>Gewicht ca. ' + nf(t.weight, 0) + ' g' + (hasD ? ' + ' + nf(td.weight, 0) + ' g' : '') + '</th><th>Sandwich</th><th>pro 100 g</th>' + (hasD ? '<th>Nachtisch</th><th>Gesamt</th>' : '') + '</tr>';
+    var anyEst = false;
+    $('#nutRows').innerHTML = NUT.map(function (n) {
+      var cell = function (tt, per) {
+        var v = tt.nut[n.k], val = per ? (tt.weight > 0 ? v / tt.weight * 100 : 0) : v;
+        var est = tt.est[n.k] && v > 0; if (est) anyEst = true;
+        return '<td class="v">' + nf(val, n.d) + ' ' + n.u + (est ? '<span class="est" title="enthält Näherungswerte">~</span>' : '') + '</td>';
+      };
+      return '<tr class="' + (n.sub ? 'sub' : 'main') + '"><td>' + n.l + '</td>' + cell(t, false) + cell(t, true) + (hasD ? cell(td, false) + cell(tg, false) : '') + '</tr>';
+    }).join('');
+    $('#estNote').hidden = !anyEst;
+    var e = { p: t.nut.protein * 4, c: t.nut.carbs * 4, f: t.nut.fat * 9 }, sum = e.p + e.c + e.f;
+    var pc = function (x) { return sum > 0 ? x / sum * 100 : 0; };
+    $('#macroBar').innerHTML = sum > 0 ?
+      '<span style="width:' + pc(e.p) + '%;background:var(--c-protein)"></span><span style="width:' + pc(e.c) + '%;background:var(--c-carbs)"></span><span style="width:' + pc(e.f) + '%;background:var(--c-fat)"></span>' : '';
+    $('#macroLeg').innerHTML = sum > 0 ?
+      '<li><i style="background:var(--c-protein)"></i>Eiweiß ' + nf(pc(e.p), 0) + ' %</li><li><i style="background:var(--c-carbs)"></i>Kohlenhydrate ' + nf(pc(e.c), 0) + ' %</li><li><i style="background:var(--c-fat)"></i>Fett ' + nf(pc(e.f), 0) + ' %</li>' : '';
+    $('#barKcal').textContent = nf(tg.nut.kcal, 0) + ' kcal';
+    $('#barPrice').textContent = eur(tg.share);
+    $('#copybox').hidden = true;
+  }
+
+  /* Zufall, Leeren, Vorlage übernehmen */
+  function applyConfig(cfg) {
+    sel = { bread: null, sauce: null, qty: {} };
+    if (cfg.bread && byId(cfg.bread)) sel.bread = cfg.bread;
+    if (cfg.sauce && byId(cfg.sauce)) { sel.sauce = cfg.sauce; sel.qty[cfg.sauce] = cfg.sq || 1; }
+    Object.keys(cfg.items || {}).forEach(function (id) { if (byId(id)) sel.qty[id] = cfg.items[id]; });
+    if (!sel.bread) { var b = products.filter(function (p) { return p.cat === 'bread'; })[0]; sel.bread = b ? b.id : null; }
+    syncChooser(); renderSummary();
+  }
+  function pickRand(a) { return a[Math.floor(Math.random() * a.length)]; }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function randomize() {
+    var vo = $('#vegOnly').checked;
+    var pool = products.filter(function (p) { return !vo || p.veg; });
+    var of = function (c) { return pool.filter(function (p) { return p.cat === c; }); };
+    var cfg = { bread: null, sauce: null, sq: 1, items: {} };
+    var breads = of('bread'); if (breads.length) cfg.bread = pickRand(breads).id;
+    var sauces = of('sauce');
+    if (sauces.length && Math.random() < 0.85) { cfg.sauce = pickRand(sauces).id; cfg.sq = pickRand([1, 1, 1.5, 2]); }
+    var core = shuffle(pool.filter(function (p) { return p.cat === 'cheese' || p.cat === 'meat'; }));
+    var others = shuffle(pool.filter(function (p) { return p.cat === 'veg' || p.cat === 'spread' || p.cat === 'cheese' || p.cat === 'meat'; }));
+    var chosen = [];
+    if (core.length) chosen.push(core[0]);
+    others.forEach(function (p) { if (chosen.length < 4 + Math.floor(Math.random() * 2) && chosen.indexOf(p) < 0) chosen.push(p); });
+    chosen.forEach(function (p) {
+      var st = stepOf(p), base = (p.def || 2) * (0.6 + Math.random() * 0.8);
+      cfg.items[p.id] = Math.max(st, Math.round(base / st) * st);
+    });
+    applyConfig(cfg);
+    toast('Zufälliges Sandwich zusammengestellt');
+  }
+  $('#rand').addEventListener('click', randomize);
+  $('#clear').addEventListener('click', function () {
+    var b = products.filter(function (p) { return p.cat === 'bread'; })[0];
+    sel = { bread: b ? b.id : null, sauce: null, qty: {} };
+    syncChooser(); renderSummary();
+  });
+
+  /* Einkaufsliste */
+  $('#copy').addEventListener('click', function () {
+    var ls = lines(), sand = ls.filter(function (l) { return !isD(l); }), des = ls.filter(isD), t = totals(sand), tg = totals(ls), rc = reach(ls);
+    var txt = sandwichName(ls) + '\n' + ls.map(function (l) {
+      return '- ' + (l.p.cat === 'bread' ? '1 ' + l.p.unit : qf(l.q) + ' ' + uLabel(l.p, l.q)) + ' ' + l.p.name + ' (Packung ' + eur(l.p.packPrice) + ')';
+    }).join('\n') + '\nPro Sandwich ' + eur(t.share) + ', Packungen ' + eur(tg.pack) + ', ca. ' + nf(t.nut.kcal, 0) + ' kcal' + (des.length ? '\nNachtisch ' + eur(totals(des).share) : '') + (rc ? '\nReicht für ' + rc.n + ' ' + sandWord(rc.n) + ', danach fehlt: ' + rc.lim.map(function (x) { return x.p.name; }).join(', ') : '');
+    var box = $('#copybox');
+    var fallback = function () { box.value = txt; box.hidden = false; box.focus(); box.select(); toast('Text markiert, bitte kopieren'); };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function () { toast('Einkaufsliste kopiert'); }, fallback);
+      else fallback();
+    } catch (err) { fallback(); }
+  });
+
+  var toastT = null;
+  function toast(msg) {
+    var el = $('#toast'); el.textContent = msg; el.hidden = false;
+    clearTimeout(toastT); toastT = setTimeout(function () { el.hidden = true; }, 3200);
+  }
+
+  /* Katalogverwaltung */
+  function sortProducts(a) {
+    return a.sort(function (x, y) { return (CAT_IDX[x.cat] - CAT_IDX[y.cat]) || ((x.order || 0) - (y.order || 0)) || x.name.localeCompare(y.name, 'de'); });
+  }
+  function norm(o) {
+    var p = Object.assign({ cat: 'veg', unit: 'Scheibe', unitG: 10, packPrice: 0, packG: 100, def: 1, veg: true, est: [], src: '', pa: false, mu: 'g', order: 999 }, o);
+    ['unitG', 'packPrice', 'packG', 'def', 'order'].concat(NUT.map(function (n) { return n.k; })).forEach(function (k) { p[k] = Number(p[k]) || 0; });
+    if (!(p.unitG > 0)) p.unitG = 1; if (!(p.packG > 0)) p.packG = p.unitG;
+    if (!CAT_IDX.hasOwnProperty(p.cat)) p.cat = 'veg';
+    if (!Array.isArray(p.est)) p.est = [];
+    return p;
+  }
+  function stateText() {
+    var t;
+    if (dbWait) t = 'Katalog wird geladen …';
+    else if (!db) t = 'Eigenständige Seite: Änderungen werden nur in diesem Browser gespeichert. Mit „Katalog exportieren“ erzeugst du die Datei katalog.json. Lade sie auf deinen Webspace neben die index.html, dann sehen alle Besucher den neuen Katalog.';
+    else if (canWrite === false) t = 'Du kannst den Katalog hier nur ansehen.';
+    else t = catalogInDb ? 'Der Katalog ist gespeichert. Änderungen sehen alle, die diese Seite öffnen.' : 'Der Standardkatalog ist aktiv. Die erste Änderung speichert ihn dauerhaft.';
+    $('#dbState').textContent = t;
+    $('#pf').hidden = canWrite === false;
+  }
+  function renderMgr() {
+    $('#mgrRows').innerHTML = products.map(function (p) {
+      var cn = CATS[CAT_IDX[p.cat]].name;
+      return '<tr data-id="' + esc(p.id) + '"><td>' + esc(p.name) + '</td><td>' + cn + '</td><td>' + esc(p.unit) + ' · ' + nf(p.unitG, 0) + ' ' + (p.mu || 'g') + '</td><td class="num">' + eur(p.packPrice) + ' / ' + nf(p.packG, 0) + ' ' + (p.mu || 'g') + '</td><td class="num">' + nf(p.kcal, 0) + '</td><td>' + esc(p.src || '') + '</td>' +
+        (canWrite === false ? '<td></td>' : '<td><button type="button" class="mini" data-act="edit">Bearbeiten</button> <button type="button" class="mini danger" data-act="del">Löschen</button></td>') + '</tr>';
+    }).join('');
+    stateText();
+  }
+  var catSel = $('#pf-cat'), unitSel = $('#pf-unit');
+  catSel.innerHTML = CATS.map(function (c) { return '<option value="' + c.id + '">' + c.name + '</option>'; }).join('');
+  unitSel.innerHTML = UNITS.map(function (u) { return '<option value="' + u + '">' + u + '</option>'; }).join('');
+  var FIELDS = ['name', 'cat', 'unit', 'unitG', 'step', 'mu', 'price', 'packG', 'def', 'kcal', 'protein', 'carbs', 'sugar', 'fat', 'sat', 'salt', 'src'];
+  function fillForm(p) {
+    $('#pf-id').value = p ? p.id : '';
+    $('#pfTitle').textContent = p ? 'Produkt bearbeiten: ' + p.name : 'Neues Produkt';
+    var v = p || { name: '', step: 1, cat: 'veg', unit: 'Scheibe', unitG: '', mu: 'g', packPrice: '', packG: '', def: '', kcal: '', protein: '', carbs: '', sugar: '', fat: '', sat: '', salt: '', src: '', veg: true, est: [] };
+    FIELDS.forEach(function (f) {
+      var key = f === 'price' ? 'packPrice' : f;
+      var val = v[key]; $('#pf-' + f).value = (val === undefined || val === null) ? '' : (typeof val === 'number' ? String(val).replace('.', ',') : val);
+    });
+    pfImg = v.img || ''; renderPfPh(); $('#pf-imgmsg').textContent = '';
+    $('#pf-veg').checked = !!v.veg;
+    $('#pf-est').checked = !!(v.est && v.est.length);
+    $('#pfErr').textContent = '';
+  }
+  function num(id) { var s = $('#pf-' + id).value.trim().replace(',', '.'); if (s === '') return NaN; return Number(s); }
+  function slug(s) { return s.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'produkt'; }
+  function readForm() {
+    var name = $('#pf-name').value.trim();
+    if (!name) return { err: 'Bitte einen Namen eingeben.' };
+    var o = { name: name, cat: $('#pf-cat').value, unit: $('#pf-unit').value, mu: $('#pf-mu').value, veg: $('#pf-veg').checked, src: $('#pf-src').value.trim() || 'Eigene Angabe' };
+    var map = { unitG: 'unitG', price: 'packPrice', packG: 'packG', def: 'def' };
+    var bad = null;
+    Object.keys(map).forEach(function (k) { var v = num(k); if (!isFinite(v) || v < 0) bad = bad || 'Bitte eine Zahl für „' + k + '“ eingeben.'; o[map[k]] = v; });
+    if (bad) return { err: 'Gewicht pro Einheit, Packungspreis, Packungsinhalt und übliche Menge brauchen eine Zahl.' };
+    if (!(o.unitG > 0) || !(o.packG > 0)) return { err: 'Gewicht pro Einheit und Packungsinhalt müssen größer als 0 sein.' };
+    NUT.forEach(function (n) { var v = num(n.k); o[n.k] = isFinite(v) && v >= 0 ? v : 0; });
+    var missing = NUT.filter(function (n) { return !isFinite(num(n.k)); }).map(function (n) { return n.k; });
+    o.est = $('#pf-est').checked ? NUT.map(function (n) { return n.k; }) : missing;
+    o.pa = false; o.img = pfImg; o.step = num('step') === 0.5 ? 0.5 : 1;
+    return { o: o };
+  }
+  function strip(p) { var o = {}; Object.keys(p).forEach(function (k) { if (k !== 'id' && p[k] !== undefined) o[k] = p[k]; }); return o; }
+  async function ensureSeeded() {
+    if (!db || catalogInDb) return;
+    for (var i = 0; i < DEFAULTS.length; i++) await db.collection('products').doc(DEFAULTS[i].id).set(strip(DEFAULTS[i]));
+    catalogInDb = true;
+  }
+  function pruneSelection() {
+    if (sel.bread && !byId(sel.bread)) sel.bread = null;
+    if (sel.sauce && !byId(sel.sauce)) sel.sauce = null;
+    Object.keys(sel.qty).forEach(function (id) { if (!byId(id)) delete sel.qty[id]; });
+    if (!sel.bread) { var b = products.filter(function (p) { return p.cat === 'bread'; })[0]; sel.bread = b ? b.id : null; }
+  }
+  var DRAFT = 'flabatta-draft-v1';
+  function persistDraft() {
+    if (db) return;
+    try { localStorage.setItem(DRAFT, JSON.stringify(products.map(function (p) { var o = strip(p); o.id = p.id; return o; }))); } catch (e) { toast('Entwurf konnte nicht im Browser gespeichert werden'); }
+  }
+  function loadList(arr) {
+    if (!Array.isArray(arr) || !arr.length) return false;
+    var out = arr.filter(function (o) { return o && o.id && o.name; }).map(function (o) { return norm(Object.assign({}, o)); });
+    if (!out.length) return false;
+    products = sortProducts(out); return true;
+  }
+  function refreshAll() { pruneSelection(); buildChooser(); buildPresets(); renderSummary(); renderMgr(); }
+  async function saveProduct(p, isNew) {
+    try {
+      if (db) {
+        await ensureSeeded();
+        await db.collection('products').doc(p.id).set(strip(p));
+      } else {
+        var i = products.findIndex(function (x) { return x.id === p.id; });
+        if (i >= 0) products[i] = p; else products.push(p);
+        sortProducts(products); refreshAll(); persistDraft();
+      }
+      toast(isNew ? 'Produkt hinzugefügt' : 'Produkt gespeichert');
+      return true;
+    } catch (e) {
+      toast(e && e.code === 'invalid_argument' ? 'Speichern nicht möglich: keine Schreibrechte' : 'Speichern fehlgeschlagen');
+      return false;
+    }
+  }
+  async function deleteProduct(id) {
+    try {
+      if (db) { await ensureSeeded(); await db.collection('products').doc(id).delete(); }
+      else { products = products.filter(function (x) { return x.id !== id; }); refreshAll(); persistDraft(); }
+      toast('Produkt gelöscht');
+    } catch (e) {
+      toast(e && e.code === 'invalid_argument' ? 'Löschen nicht möglich: keine Schreibrechte' : 'Löschen fehlgeschlagen');
+    }
+  }
+  $('#pf').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var r = readForm();
+    if (r.err) { $('#pfErr').textContent = r.err; return; }
+    var id = $('#pf-id').value, isNew = !id;
+    var existing = id ? byId(id) : null;
+    var o = r.o;
+    if (isNew) {
+      id = slug(o.name);
+      while (byId(id)) id += '-' + Math.floor(Math.random() * 90 + 10);
+      o.order = products.reduce(function (m, x) { return Math.max(m, x.order || 0); }, 0) + 1;
+    } else { o.order = existing ? existing.order : 999; }
+    o.id = id;
+    if (existing && existing.pa && o.packPrice === existing.packPrice) o.pa = true;
+    $('#pfSave').disabled = true;
+    var ok = await saveProduct(norm(o), isNew);
+    $('#pfSave').disabled = false;
+    if (ok) fillForm(null);
+  });
+  function renderPfPh() { $('#pf-ph').innerHTML = phInner(pfImg, $('#pf-name').value || '·', $('#pf-id').value); }
+  function shrink(file) {
+    return new Promise(function (res, rej) {
+      var u = URL.createObjectURL(file), im = new Image();
+      im.onload = function () {
+        var s = Math.min(1, 640 / Math.max(im.width, im.height)), c = document.createElement('canvas');
+        c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
+        c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); URL.revokeObjectURL(u);
+        c.toBlob(function (b) { b ? res(b) : rej(new Error('blob')); }, 'image/jpeg', 0.85);
+      };
+      im.onerror = function () { rej(new Error('img')); };
+      im.src = u;
+    });
+  }
+  $('#pf-file').addEventListener('change', async function (e) {
+    var f = e.target.files && e.target.files[0]; if (!f) return;
+    var msg = $('#pf-imgmsg');
+    msg.textContent = 'Foto wird hochgeladen …';
+    try {
+      if (assetsNs) { var r = await assetsNs.upload(await shrink(f)); pfImg = r.url; }
+      else {
+        var blob = await shrink(f);
+        pfImg = await new Promise(function (res, rej) { var fr = new FileReader(); fr.onload = function () { res(fr.result); }; fr.onerror = rej; fr.readAsDataURL(blob); });
+      } renderPfPh(); msg.textContent = 'Foto bereit, bitte Produkt speichern.'; }
+    catch (err) { msg.textContent = 'Upload fehlgeschlagen.'; }
+    e.target.value = '';
+  });
+  $('#pf-imgclear').addEventListener('click', function () { pfImg = ''; renderPfPh(); $('#pf-imgmsg').textContent = 'Foto entfernt, bitte Produkt speichern.'; });
+  $('#pf-name').addEventListener('input', function () { if (!pfImg) renderPfPh(); });
+  $('#pfReset').addEventListener('click', function () { fillForm(null); });
+  var delArm = { id: null, t: null };
+  $('#mgrRows').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-act]'); if (!b) return;
+    var id = b.closest('tr').dataset.id, p = byId(id); if (!p) return;
+    if (b.dataset.act === 'edit') { fillForm(p); $('#pf').scrollIntoView({ block: 'nearest' }); $('#pf-name').focus(); return; }
+    if (delArm.id === id) { clearTimeout(delArm.t); delArm = { id: null, t: null }; deleteProduct(id); return; }
+    document.querySelectorAll('#mgrRows .mini.danger').forEach(function (x) { x.textContent = 'Löschen'; });
+    b.textContent = 'Wirklich löschen?'; delArm.id = id; clearTimeout(delArm.t);
+    delArm.t = setTimeout(function () { b.textContent = 'Löschen'; delArm.id = null; }, 4000);
+  });
+
+  function onSnap(snap) {
+    dbWait = false;
+    if (snap.empty) { catalogInDb = false; stateText(); return; }
+    catalogInDb = true;
+    var arr = snap.docs.map(function (d) { var o = Object.assign({}, d.data()); o.id = d.id; return norm(o); });
+    products = sortProducts(arr);
+    refreshAll();
+  }
+
+  /* Start: Standardkatalog sofort zeigen, Datenbank danach zuschalten */
+  sortProducts(products);
+  fillForm(null);
+  applyConfig(PRESETS[0]);
+  buildChooser(); buildPresets(); renderSummary(); renderMgr();
+  applyConfig(PRESETS[0]);
+
+  (async function () {
+    try {
+      var c = window.claude;
+      var got = await Promise.all([c && c.use ? c.use('db') : null, c && c.use ? c.use('user') : null, c && c.use ? c.use('assets') : null]);
+      db = got[0] || null; assetsNs = got[2] || null;
+      var u = got[1];
+      if (u) { try { canWrite = u.can('data.write'); } catch (e) { canWrite = null; } }
+      var adm = false; try { adm = !!(u && (u.isOwner() || u.canEdit())); } catch (e) {}
+      if (!db) {
+        /* Eigenständige Seite: Katalog aus katalog.json, Entwurf aus dem Browser des Admins */
+        try { var rr = await fetch('katalog.json', { cache: 'no-cache' }); if (rr.ok) loadList(await rr.json()); } catch (e) {}
+        try { var dr = localStorage.getItem(DRAFT); if (dr) loadList(JSON.parse(dr)); } catch (e) {}
+        try { if (location.hash === '#admin') localStorage.setItem('flabatta-admin', '1'); adm = localStorage.getItem('flabatta-admin') === '1'; } catch (e) { adm = location.hash === '#admin'; }
+        $('#sa').hidden = !adm; refreshAll();
+      }
+      $('#mgr').hidden = !adm; $('#navManage').hidden = !adm;
+      if (db) {
+        db.collection('products').onSnapshot(onSnap, function () { dbWait = false; stateText(); });
+      } else { dbWait = false; }
+    } catch (e) { db = null; dbWait = false; }
+    renderMgr(); stateText();
+  })();
+  $('#saExport').addEventListener('click', function () {
+    var data = JSON.stringify(products.map(function (p) { var o = strip(p); o.id = p.id; return o; }), null, 1);
+    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = 'katalog.json';
+    document.body.appendChild(a); a.click(); a.remove(); toast('katalog.json erzeugt');
+  });
+  $('#saImport').addEventListener('click', function () { $('#saFile').click(); });
+  $('#saFile').addEventListener('change', async function (e) {
+    var f = e.target.files && e.target.files[0]; if (!f) return;
+    try { if (loadList(JSON.parse(await f.text()))) { refreshAll(); persistDraft(); toast('Katalog importiert'); } else toast('Datei enthält keinen gültigen Katalog'); }
+    catch (err) { toast('Datei konnte nicht gelesen werden'); }
+    e.target.value = '';
+  });
+  $('#saReset').addEventListener('click', function () {
+    try { localStorage.removeItem(DRAFT); } catch (e) {}
+    toast('Entwurf verworfen, Seite wird neu geladen'); setTimeout(function () { location.reload(); }, 700);
+  });
+})();
+</script>
+
+</body></html>
